@@ -1,0 +1,6 @@
+{
+    "providers": ["App\\Providers\\CartServiceProvider"],
+    "aliases": {
+        "Cart": "App\\Facades\\Cart"
+    }
+}

@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Redirect Trailing Slashes...
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    # Optional: Prevent Access to .env and Other Sensitive Files
+    <FilesMatch "\.(env|env.example|gitignore|gitattributes|log|ini|sh|bak|sql)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>
