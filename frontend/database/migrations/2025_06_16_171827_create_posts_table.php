@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->text('content');
-            $table->string('image');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('category');
-            $table->boolean('featured')->default(false);
+            $table->text('excerpt')->nullable();
+            $table->longText('content');
+            $table->string('image')->nullable();
+            $table->enum('post_type', ['standard','gallery','video'])->default('standard');
+            $table->string('video_link')->nullable();
+            $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
+            $table->unsignedInteger('comment_count')->default(0);
             $table->timestamps();
         });
     }
