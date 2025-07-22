@@ -9,6 +9,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\QuizController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +42,13 @@ Route::get('/blog/{post}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/privacy-policy', function() {
     return view('pages.privacy-policy');
 })->name('privacy-policy');
+
+// Quiz routes (user/guest)
+Route::get('/quiz', [QuizController::class, 'index'])->name('quiz.index');
+Route::get('/quiz/{quiz}', [QuizController::class, 'show'])->name('quiz.show');
+Route::post('/quiz/{quiz}/start', [QuizController::class, 'start'])->name('quiz.start');
+Route::post('/quiz/{quiz}/submit', [QuizController::class, 'submit'])->name('quiz.submit');
+Route::get('/quiz/{quiz}/result/{attempt}', [QuizController::class, 'result'])->name('quiz.result');
+Route::get('/quiz/{quiz}/leaderboard', [QuizController::class, 'leaderboard'])->name('quiz.leaderboard');
+Route::get('/quiz/{quiz}/attempt/{attempt}', [QuizController::class, 'attempt'])->name('quiz.attempt');
+Route::get('/quiz/attempt/{attempt}/certificate', [QuizController::class, 'certificate'])->name('quiz.certificate');

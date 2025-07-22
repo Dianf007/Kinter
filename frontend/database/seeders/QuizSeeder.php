@@ -21,8 +21,8 @@ class QuizSeeder extends Seeder
 
         // Create a quiz
         $quizId = DB::table('quizzes')->insertGetId([
-            'title' => 'Contoh Kuis Wayground',
-            'description' => 'Kuis demo untuk fitur Wayground',
+            'title' => 'Contoh Kuis Pondok Koding',
+            'description' => 'Kuis demo untuk fitur Pondok Koding',
             'teacher_id' => $teacher->id,
             'is_active' => true,
             'created_at' => now(),

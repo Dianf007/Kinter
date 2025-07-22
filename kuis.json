@@ -1,0 +1,202 @@
+[
+  {
+    "question": "Apa fungsi monitor?",
+    "options": [
+      "A. Mengetik",
+      "B. Menampilkan gambar",
+      "C. Memutar lagu",
+      "D. Mengklik ikon"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Perangkat untuk mengetik disebut...",
+    "options": [
+      "A. Monitor",
+      "B. CPU",
+      "C. Keyboard",
+      "D. Mouse"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Mouse digunakan untuk...",
+    "options": [
+      "A. Menggambar",
+      "B. Mengetik",
+      "C. Menggerakkan pointer",
+      "D. Mencetak dokumen"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "CPU disebut juga...",
+    "options": [
+      "A. Otak komputer",
+      "B. Layar komputer",
+      "C. Alat input",
+      "D. Printer"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Alat untuk mencetak dokumen adalah...",
+    "options": [
+      "A. Monitor",
+      "B. Printer",
+      "C. Mouse",
+      "D. Speaker"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Perangkat output berikut adalah...",
+    "options": [
+      "A. Keyboard",
+      "B. Mouse",
+      "C. Monitor",
+      "D. Scanner"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Alat untuk mendengarkan suara dari komputer adalah...",
+    "options": [
+      "A. Speaker",
+      "B. Monitor",
+      "C. Mouse",
+      "D. Keyboard"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Perangkat yang digunakan untuk memasukkan data berupa gambar adalah...",
+    "options": [
+      "A. Printer",
+      "B. Scanner",
+      "C. Monitor",
+      "D. Speaker"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Bagian komputer yang berfungsi menampilkan hasil pengolahan data adalah...",
+    "options": [
+      "A. CPU",
+      "B. Keyboard",
+      "C. Monitor",
+      "D. Mouse"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Alat untuk menyimpan data secara permanen adalah...",
+    "options": [
+      "A. RAM",
+      "B. Harddisk",
+      "C. Monitor",
+      "D. Mouse"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "RAM berfungsi untuk...",
+    "options": [
+      "A. Menyimpan data sementara",
+      "B. Menyimpan data permanen",
+      "C. Menampilkan gambar",
+      "D. Mencetak dokumen"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Perangkat berikut yang termasuk perangkat input adalah...",
+    "options": [
+      "A. Monitor",
+      "B. Printer",
+      "C. Keyboard",
+      "D. Speaker"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Fungsi utama keyboard adalah...",
+    "options": [
+      "A. Mengetik data",
+      "B. Menampilkan gambar",
+      "C. Mencetak dokumen",
+      "D. Menggerakkan pointer"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Perangkat yang digunakan untuk menggerakkan kursor adalah...",
+    "options": [
+      "A. Keyboard",
+      "B. Mouse",
+      "C. Monitor",
+      "D. Printer"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Alat untuk menghubungkan komputer dengan jaringan internet adalah...",
+    "options": [
+      "A. Modem",
+      "B. Speaker",
+      "C. Monitor",
+      "D. Printer"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Perangkat berikut yang bukan perangkat input adalah...",
+    "options": [
+      "A. Keyboard",
+      "B. Mouse",
+      "C. Monitor",
+      "D. Scanner"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Bagian komputer yang berfungsi sebagai alat pemroses data adalah...",
+    "options": [
+      "A. Monitor",
+      "B. CPU",
+      "C. Keyboard",
+      "D. Mouse"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Perangkat yang digunakan untuk menampilkan suara adalah...",
+    "options": [
+      "A. Monitor",
+      "B. Speaker",
+      "C. Mouse",
+      "D. Keyboard"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Alat untuk memindai gambar atau dokumen ke komputer adalah...",
+    "options": [
+      "A. Printer",
+      "B. Scanner",
+      "C. Monitor",
+      "D. Speaker"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Perangkat berikut yang termasuk perangkat output adalah...",
+    "options": [
+      "A. Keyboard",
+      "B. Mouse",
+      "C. Monitor",
+      "D. Scanner"
+    ],
+    "answer": "C"
+  }
+]
