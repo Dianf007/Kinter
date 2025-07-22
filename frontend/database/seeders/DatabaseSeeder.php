@@ -24,6 +24,13 @@ class DatabaseSeeder extends Seeder
             TagSeeder::class,
             PortfolioSeeder::class,
             PostSeeder::class,
+            QuizSeeder::class,
+            PowerUpSeeder::class,
+            BadgeSeeder::class,
+            UserPointsSeeder::class,
+            UserPowerUpSeeder::class,
+            UserBadgeSeeder::class,
+            LeaderboardSeeder::class,
         ]);
     }
 }
