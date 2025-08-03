@@ -20,7 +20,7 @@
         <p><strong>{{ $quiz->title }}</strong></p>
         <p>Nama: <strong>{{ $userName }}</strong></p>
         <p>Skor: <strong>{{ $attempt->score }}%</strong></p>
-        <p>Tanggal: <strong>{{ $attempt->finished_at->format('d M Y') }}</strong></p>
+        <p>Tanggal: <strong>{{ \Carbon\Carbon::parse($attempt->finished_at)->format('d M Y') }}</strong></p>
     </div>
     <div class="footer">
         <p>Terima kasih telah berpartisipasi.</p>

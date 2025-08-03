@@ -121,6 +121,24 @@
         margin: 0 auto;
     }
     
+    .quiz-card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        width: 100%;
+    }
+    
+    .quiz-card-link:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .quiz-card-link:focus {
+        outline: 2px solid rgba(0, 245, 255, 0.5);
+        outline-offset: 2px;
+        border-radius: 20px;
+    }
+    
     @media (max-width: 768px) {
         .quiz-grid {
             grid-template-columns: 1fr;
@@ -147,36 +165,38 @@
 
 <div class="quiz-grid">
     @foreach($quizzes as $quiz)
-    <div class="quiz-card" onclick="location.href='{{ route('quiz.show', $quiz) }}'">
-        <div class="quiz-title">{{ $quiz->title }}</div>
-        
-        <div class="quiz-meta">
-            <div class="quiz-questions">
-                <i class="fas fa-question-circle"></i>
-                {{ $quiz->questions_count }} Questions
+    <a href="{{ route('quiz.show', $quiz) }}" class="quiz-card-link">
+        <div class="quiz-card">
+            <div class="quiz-title">{{ $quiz->title }}</div>
+            
+            <div class="quiz-meta">
+                <div class="quiz-questions">
+                    <i class="fas fa-question-circle"></i>
+                    {{ $quiz->questions_count }} Questions
+                </div>
+                <div class="quiz-difficulty difficulty-{{ strtolower($quiz->difficulty ?? 'medium') }}">
+                    {{ $quiz->difficulty ?? 'Medium' }}
+                </div>
             </div>
-            <div class="quiz-difficulty difficulty-{{ strtolower($quiz->difficulty ?? 'medium') }}">
-                {{ $quiz->difficulty ?? 'Medium' }}
+            
+            @if($quiz->description)
+            <div class="quiz-description">
+                {{ Str::limit($quiz->description, 120) }}
+            </div>
+            @endif
+            
+            <div class="quiz-stats">
+                <span>
+                    <i class="fas fa-clock"></i>
+                    {{ $quiz->time_limit ?? 30 }} min
+                </span>
+                <span>
+                    <i class="fas fa-users"></i>
+                    {{ rand(10, 100) }} taken
+                </span>
             </div>
         </div>
-        
-        @if($quiz->description)
-        <div class="quiz-description">
-            {{ Str::limit($quiz->description, 120) }}
-        </div>
-        @endif
-        
-        <div class="quiz-stats">
-            <span>
-                <i class="fas fa-clock"></i>
-                {{ $quiz->time_limit ?? 30 }} min
-            </span>
-            <span>
-                <i class="fas fa-users"></i>
-                {{ rand(10, 100) }} taken
-            </span>
-        </div>
-    </div>
+    </a>
     @endforeach
 </div>
 
@@ -187,5 +207,4 @@
     </div>
 </div>
 @endif
-</section>
 @endsection

@@ -298,10 +298,10 @@
                 </div>
 
                 <div class="navigation-buttons">
-                    <button type="button" class="nav-btn" id="prev-btn" onclick="previousQuestion()" {{ $index === 0 ? 'style=visibility:hidden' : '' }}>
+                    <button type="button" class="nav-btn" id="prev-btn" data-action="previous" {{ $index === 0 ? 'style=visibility:hidden' : '' }}>
                         ← Previous
                     </button>
-                    <button type="button" class="nav-btn" id="next-btn" onclick="nextQuestion()">
+                    <button type="button" class="nav-btn" id="next-btn" data-action="next">
                         {{ $index === count($quiz->questions) - 1 ? 'Finish Quiz' : 'Next →' }}
                     </button>
                 </div>
@@ -335,6 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
     startTimer();
     bindAnswerClicks();
     bindPowerupClicks();
+    bindNavigationClicks();
 });
 
 // Timer logic with circular progress
@@ -500,6 +501,25 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Navigation functions
+function bindNavigationClicks() {
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const action = this.dataset.action;
+            
+            if (action === 'previous') {
+                previousQuestion();
+            } else if (action === 'next') {
+                if (currentQuestion === totalQuestions - 1) {
+                    submitQuiz();
+                } else {
+                    nextQuestion();
+                }
+            }
+        });
+    });
+}
+
 function nextQuestion() {
     if (currentQuestion < totalQuestions - 1) {
         document.querySelector('.question-card.active').classList.remove('active');
