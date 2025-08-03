@@ -330,6 +330,175 @@
         border-color: transparent;
     }
     
+    /* Export Modal Styles */
+    .export-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .export-modal.show {
+        display: flex;
+    }
+    
+    .modal-content {
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-lg);
+        padding: var(--spacing-xl);
+        max-width: 500px;
+        width: 90%;
+        animation: slideInUp 0.3s ease;
+    }
+    
+    .modal-header {
+        text-align: center;
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .modal-header h3 {
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-sm);
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    
+    .modal-header p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+    
+    .export-options {
+        display: grid;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .export-option {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid var(--glass-border);
+        border-radius: var(--border-radius);
+        padding: var(--spacing-lg);
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+    }
+    
+    .export-option:hover {
+        border-color: rgba(0, 245, 255, 0.5);
+        background: rgba(0, 245, 255, 0.1);
+    }
+    
+    .export-option.selected {
+        border-color: rgba(0, 245, 255, 0.8);
+        background: rgba(0, 245, 255, 0.15);
+    }
+    
+    .option-title {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-xs);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+    
+    .option-desc {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .date-inputs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .date-input-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .date-input-group label {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-bottom: var(--spacing-xs);
+        font-weight: 600;
+    }
+    
+    .date-input {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius);
+        padding: var(--spacing-sm);
+        color: var(--text-primary);
+        font-size: 0.95rem;
+    }
+    
+    .date-input:focus {
+        outline: none;
+        border-color: rgba(0, 245, 255, 0.6);
+        background: rgba(255, 255, 255, 0.12);
+    }
+    
+    .modal-actions {
+        display: flex;
+        gap: var(--spacing-md);
+        justify-content: flex-end;
+    }
+    
+    .modal-btn {
+        padding: var(--spacing-md) var(--spacing-lg);
+        border: none;
+        border-radius: var(--border-radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        min-width: 100px;
+    }
+    
+    .btn-cancel {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-secondary);
+        border: 1px solid var(--glass-border);
+    }
+    
+    .btn-export {
+        background: var(--accent-gradient);
+        color: white;
+    }
+    
+    .modal-btn:hover {
+        transform: translateY(-2px);
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes slideInUp {
+        from { 
+            opacity: 0; 
+            transform: translateY(30px); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+    }
+    
     @media (max-width: 768px) {
         .student-profile {
             flex-direction: column;
@@ -410,7 +579,7 @@
 
     <!-- Action Buttons -->
     <div class="report-actions">
-        <button class="action-btn btn-success" onclick="exportPDF()">
+        <button class="action-btn btn-success" onclick="showExportModal()">
             <i class="fas fa-file-pdf"></i>
             Export PDF
         </button>
@@ -526,9 +695,71 @@
     </div>
 </div>
 
+<!-- Export Modal -->
+<div id="exportModal" class="export-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-file-pdf"></i> Export Laporan PDF</h3>
+            <p>Pilih jenis laporan yang ingin dicetak</p>
+        </div>
+        
+        <div class="export-options">
+            <!-- Weekly Export Option -->
+            <div class="export-option" data-type="weekly">
+                <div class="option-title">
+                    <i class="fas fa-calendar-week"></i>
+                    Laporan Mingguan
+                </div>
+                <div class="option-desc">
+                    Cetak laporan untuk periode minggu tertentu
+                </div>
+                <div class="date-inputs" style="display: none;">
+                    <div class="date-input-group">
+                        <label>Tanggal Mulai</label>
+                        <input type="date" class="date-input" id="weeklyStartDate">
+                    </div>
+                    <div class="date-input-group">
+                        <label>Tanggal Selesai</label>
+                        <input type="date" class="date-input" id="weeklyEndDate">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Monthly Export Option -->
+            <div class="export-option" data-type="monthly">
+                <div class="option-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    Laporan Bulanan
+                </div>
+                <div class="option-desc">
+                    Cetak laporan untuk bulan tertentu
+                </div>
+                <div class="date-inputs" style="display: none;">
+                    <div class="date-input-group">
+                        <label>Bulan & Tahun</label>
+                        <input type="month" class="date-input" id="monthlyDate">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal-actions">
+            <button class="modal-btn btn-cancel" onclick="closeExportModal()">
+                <i class="fas fa-times"></i> Batal
+            </button>
+            <button class="modal-btn btn-export" onclick="processExport()">
+                <i class="fas fa-download"></i> Export PDF
+            </button>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize export modal
+    initializeExportModal();
+    
     // Filter functionality
     const filterBtns = document.querySelectorAll('.filter-btn');
     const timelineItems = document.querySelectorAll('.timeline-item');
@@ -612,49 +843,177 @@ document.addEventListener('DOMContentLoaded', function() {
     statValues.forEach(stat => observer.observe(stat));
 });
 
+// Export Modal Functions
+function initializeExportModal() {
+    const exportOptions = document.querySelectorAll('.export-option');
+    const today = new Date();
+    
+    // Set default dates
+    const weeklyStartDate = document.getElementById('weeklyStartDate');
+    const weeklyEndDate = document.getElementById('weeklyEndDate');
+    const monthlyDate = document.getElementById('monthlyDate');
+    
+    // Set current week as default
+    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+    const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+    
+    weeklyStartDate.value = startOfWeek.toISOString().split('T')[0];
+    weeklyEndDate.value = endOfWeek.toISOString().split('T')[0];
+    
+    // Set current month as default
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    monthlyDate.value = currentMonth;
+    
+    // Handle option selection
+    exportOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // Remove selection from all options
+            exportOptions.forEach(opt => {
+                opt.classList.remove('selected');
+                opt.querySelector('.date-inputs').style.display = 'none';
+            });
+            
+            // Select current option
+            this.classList.add('selected');
+            this.querySelector('.date-inputs').style.display = 'grid';
+        });
+    });
+    
+    // Handle weekly start date change
+    weeklyStartDate.addEventListener('change', function() {
+        const startDate = new Date(this.value);
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 6);
+        weeklyEndDate.value = endDate.toISOString().split('T')[0];
+    });
+}
+
+function showExportModal() {
+    const modal = document.getElementById('exportModal');
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeExportModal() {
+    const modal = document.getElementById('exportModal');
+    modal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+    
+    // Reset selections
+    const exportOptions = document.querySelectorAll('.export-option');
+    exportOptions.forEach(option => {
+        option.classList.remove('selected');
+        option.querySelector('.date-inputs').style.display = 'none';
+    });
+}
+
+function processExport() {
+    const selectedOption = document.querySelector('.export-option.selected');
+    
+    if (!selectedOption) {
+        showToast('Silakan pilih jenis laporan terlebih dahulu', 'error');
+        return;
+    }
+    
+    const exportType = selectedOption.dataset.type;
+    let startDate, endDate, period;
+    
+    if (exportType === 'weekly') {
+        startDate = document.getElementById('weeklyStartDate').value;
+        endDate = document.getElementById('weeklyEndDate').value;
+        
+        if (!startDate || !endDate) {
+            showToast('Silakan isi tanggal mulai dan selesai', 'error');
+            return;
+        }
+        
+        period = `${formatDate(startDate)} - ${formatDate(endDate)}`;
+    } else if (exportType === 'monthly') {
+        const monthlyDateValue = document.getElementById('monthlyDate').value;
+        
+        if (!monthlyDateValue) {
+            showToast('Silakan pilih bulan dan tahun', 'error');
+            return;
+        }
+        
+        const [year, month] = monthlyDateValue.split('-');
+        const monthNames = [
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+        
+        period = `${monthNames[parseInt(month) - 1]} ${year}`;
+        
+        // Set start and end date for the month
+        startDate = `${year}-${month}-01`;
+        const lastDay = new Date(year, month, 0).getDate();
+        endDate = `${year}-${month}-${lastDay.toString().padStart(2, '0')}`;
+    }
+    
+    // Close modal and start export
+    closeExportModal();
+    exportPDF(exportType, startDate, endDate, period);
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+}
+
 // Export PDF function
-function exportPDF() {
+function exportPDF(exportType = 'all', startDate = null, endDate = null, period = null) {
     const studentName = "{{ $student->name }}";
     const studentClass = "{{ $student->class }}";
     
-    // Show loading
-    const btn = event.target.closest('button');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
-    btn.disabled = true;
+    // Show loading toast
+    showToast('Memproses PDF...', 'info');
     
-    // Simulate PDF generation (replace with actual implementation)
+    // Prepare export data
+    const exportData = {
+        type: exportType,
+        start_date: startDate,
+        end_date: endDate,
+        period: period,
+        student_id: {{ $student->id }}
+    };
+    
+    // Create temporary download link
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/teacher/reports/{{ $student->id }}/export-pdf';
+    form.style.display = 'none';
+    
+    // Add CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = '_token';
+    csrfInput.value = csrfToken;
+    form.appendChild(csrfInput);
+    
+    // Add export data
+    Object.keys(exportData).forEach(key => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = exportData[key];
+        form.appendChild(input);
+    });
+    
+    document.body.appendChild(form);
+    
+    // Submit form
+    form.submit();
+    
+    // Clean up
     setTimeout(() => {
-        // Here you would make an AJAX call to generate PDF
-        fetch(`/teacher/reports/{{ $student->id }}/export-pdf`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = `Laporan_${studentName.replace(' ', '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-            showToast('PDF berhasil diunduh!', 'success');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showToast('Fitur PDF sedang dalam pengembangan', 'info');
-        })
-        .finally(() => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        });
-    }, 2000);
+        document.body.removeChild(form);
+        showToast('PDF berhasil diunduh!', 'success');
+    }, 1000);
 }
 
 // Send to parent function
