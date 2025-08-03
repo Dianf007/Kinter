@@ -16,7 +16,8 @@ class DailyReport extends Model
         'activity_description',
         'performance_rating',
         'notes',
-        'report_date'
+        'report_date',
+        'duration'
     ];
     
     protected $casts = [

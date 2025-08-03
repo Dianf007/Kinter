@@ -65,5 +65,7 @@ Route::prefix('teacher')->name('teacher.')->group(function() {
     Route::get('/reports/create', [TeacherReportController::class, 'create'])->name('reports.create');
     Route::post('/reports', [TeacherReportController::class, 'store'])->name('reports.store');
     Route::get('/reports/student/{student}', [TeacherReportController::class, 'show'])->name('reports.show');
+    Route::post('/reports/{student}/export-pdf', [TeacherReportController::class, 'exportPDF'])->name('reports.export-pdf');
+    Route::post('/reports/{student}/send-email', [TeacherReportController::class, 'sendEmail'])->name('reports.send-email');
     Route::get('/students', [TeacherReportController::class, 'students'])->name('students.index');
 });
