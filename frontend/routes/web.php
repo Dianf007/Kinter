@@ -10,6 +10,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\TeacherReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,3 +53,17 @@ Route::get('/quiz/{quiz}/result/{attempt}', [QuizController::class, 'result'])->
 Route::get('/quiz/{quiz}/leaderboard', [QuizController::class, 'leaderboard'])->name('quiz.leaderboard');
 Route::get('/quiz/{quiz}/attempt/{attempt}', [QuizController::class, 'attempt'])->name('quiz.attempt');
 Route::get('/quiz/attempt/{attempt}/certificate', [QuizController::class, 'certificate'])->name('quiz.certificate');
+
+// Teacher Portal Landing Page
+Route::get('/teacher', function() {
+    return view('teacher.landing');
+})->name('teacher.landing');
+
+// Teacher Report Management routes
+Route::prefix('teacher')->name('teacher.')->group(function() {
+    Route::get('/reports', [TeacherReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/create', [TeacherReportController::class, 'create'])->name('reports.create');
+    Route::post('/reports', [TeacherReportController::class, 'store'])->name('reports.store');
+    Route::get('/reports/student/{student}', [TeacherReportController::class, 'show'])->name('reports.show');
+    Route::get('/students', [TeacherReportController::class, 'students'])->name('students.index');
+});
