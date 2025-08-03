@@ -123,7 +123,7 @@
     
     .rating-selector {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: var(--spacing-md);
         margin-top: var(--spacing-sm);
     }
@@ -181,6 +181,18 @@
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .rating-desc {
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        font-weight: 400;
+        line-height: 1.3;
+        text-transform: none;
+        letter-spacing: normal;
+        text-align: center;
+        opacity: 0.8;
     }
     
     .rating-input:checked + .rating-label {
@@ -197,6 +209,11 @@
     
     .rating-input:checked + .rating-label .rating-text {
         color: var(--text-primary);
+    }
+    
+    .rating-input:checked + .rating-label .rating-desc {
+        color: var(--text-secondary);
+        opacity: 1;
     }
     
     .rating-label:hover {
@@ -332,7 +349,7 @@
         }
         
         .rating-selector {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
         }
         
         .activity-grid {
@@ -443,29 +460,32 @@
                 <!-- Rating Selection -->
                 <div class="form-group">
                     <label class="form-label">
-                        <i class="fas fa-star"></i>
+                        <i class="fas fa-chart-line"></i>
                         Tingkat Pemahaman Siswa
                     </label>
                     <div class="rating-selector">
                         <div class="rating-option">
                             <input type="radio" name="performance_rating" id="rating_1" value="1" class="rating-input" required>
                             <label for="rating_1" class="rating-label">
-                                <div class="rating-emoji">😔</div>
-                                <div class="rating-text">Kurang Baik</div>
+                                <div class="rating-emoji">🌱</div>
+                                <div class="rating-text">Awal Berkembang</div>
+                                <div class="rating-desc">Mulai memahami beberapa hal dasar dalam proses belajar</div>
                             </label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" name="performance_rating" id="rating_2" value="2" class="rating-input">
                             <label for="rating_2" class="rating-label">
-                                <div class="rating-emoji">😐</div>
-                                <div class="rating-text">Cukup Baik</div>
+                                <div class="rating-emoji">🌿</div>
+                                <div class="rating-text">Mulai Berkembang</div>
+                                <div class="rating-desc">Memahami beberapa aspek pada proses belajar</div>
                             </label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" name="performance_rating" id="rating_3" value="3" class="rating-input">
                             <label for="rating_3" class="rating-label">
-                                <div class="rating-emoji">🙂</div>
-                                <div class="rating-text">Baik</div>
+                                <div class="rating-emoji">🌳</div>
+                                <div class="rating-text">Berkembang</div>
+                                <div class="rating-desc">Memahami proses belajar dan menerapkan keterampilan</div>
                             </label>
                         </div>
                         <div class="rating-option">
@@ -478,8 +498,9 @@
                         <div class="rating-option">
                             <input type="radio" name="performance_rating" id="rating_5" value="5" class="rating-input">
                             <label for="rating_5" class="rating-label">
-                                <div class="rating-emoji">🤩</div>
-                                <div class="rating-text">Istimewa</div>
+                                <div class="rating-emoji">🏆</div>
+                                <div class="rating-text">Sangat Mahir</div>
+                                <div class="rating-desc">Pemahaman menyeluruh dalam segala situasi</div>
                             </label>
                         </div>
                     </div>
@@ -519,102 +540,9 @@
         </form>
     </div>
 </div>
-                                <div class="rating-text">Cukup Baik</div>
-                            </label>
-                        </div>
-                        <div class="rating-option">
-                            <input type="radio" name="performance_rating" value="3" id="rating-3" class="rating-input">
-                            <label for="rating-3" class="rating-label">
-                                <div class="rating-emoji">🟢</div>
-                                <div class="rating-text">Baik</div>
-                            </label>
-                        </div>
-                        <div class="rating-option">
-                            <input type="radio" name="performance_rating" value="4" id="rating-4" class="rating-input">
-                            <label for="rating-4" class="rating-label">
-                                <div class="rating-emoji">🔵</div>
-                                <div class="rating-text">Sangat Baik</div>
-                            </label>
-                        </div>
-                        <div class="rating-option">
-                            <input type="radio" name="performance_rating" value="5" id="rating-5" class="rating-input">
-                            <label for="rating-5" class="rating-label">
-                                <div class="rating-emoji">🟣</div>
-                                <div class="rating-text">Istimewa</div>
-                            </label>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Notes -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <i class="fas fa-sticky-note"></i> Catatan Tambahan (Opsional)
-                    </label>
-                    <textarea name="notes" class="form-textarea" rows="3" 
-                              placeholder="Catatan khusus tentang pembelajaran siswa..."></textarea>
-                </div>
-            </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn-primary">
-                    <i class="fas fa-save"></i> Simpan Laporan
-                </button>
-                <a href="{{ route('teacher.reports.index') }}" class="btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Kembali
-                </a>
-            </div>
-        </form>
-    </div>
-</div>
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Auto-focus on student selection
-    const studentSelect = document.querySelector('select[name="student_id"]');
-    if (studentSelect) {
-        studentSelect.focus();
-    }
-    
-    // Add animation to form elements
-    const formGroups = document.querySelectorAll('.form-group');
-    formGroups.forEach((group, index) => {
-        group.style.opacity = '0';
-        group.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-            group.style.transition = 'all 0.5s ease';
-            group.style.opacity = '1';
-            group.style.transform = 'translateY(0)';
-        }, index * 100);
-    });
-    
-    // Smart description suggestions based on activity
-    const activityInputs = document.querySelectorAll('input[name="activity_id"]');
-    const descriptionTextarea = document.querySelector('textarea[name="activity_description"]');
-    
-    activityInputs.forEach(input => {
-        input.addEventListener('change', function() {
-            const activityName = this.closest('.activity-option').querySelector('h4').textContent;
-            
-            const suggestions = {
-                'Code.org': 'Siswa menyelesaikan lesson tentang...',
-                'Scratch': 'Siswa membuat project...',
-                'Quiz Wayground': 'Siswa mengerjakan quiz tentang...',
-                'Membaca': 'Siswa membaca materi tentang...',
-                'Matematika': 'Siswa belajar konsep...',
-                'Sains': 'Siswa melakukan eksperimen...'
-            };
-            
-            if (suggestions[activityName] && !descriptionTextarea.value) {
-                descriptionTextarea.placeholder = suggestions[activityName];
-            }
-        });
-    });
-});
-</script>
-@endpush
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -776,19 +704,19 @@ document.addEventListener('DOMContentLoaded', function() {
             let suggestion = '';
             switch(rating) {
                 case 1:
-                    suggestion = 'Siswa mengalami kesulitan memahami materi. ';
+                    suggestion = 'Siswa mulai memahami beberapa hal dasar dalam proses belajar dan mulai menggunakan beberapa keterampilan dalam situasi tertentu. ';
                     break;
                 case 2:
-                    suggestion = 'Siswa memahami sebagian materi dengan bantuan. ';
+                    suggestion = 'Siswa memahami beberapa aspek pada proses belajar dan mulai menggunakan beberapa keterampilan dalam situasi tertentu. ';
                     break;
                 case 3:
-                    suggestion = 'Siswa memahami materi dengan baik. ';
+                    suggestion = 'Siswa memahami proses belajar dan menerapkan keterampilan dalam situasi tertentu. ';
                     break;
                 case 4:
-                    suggestion = 'Siswa menguasai materi dengan sangat baik. ';
+                    suggestion = 'Siswa menunjukkan pemahaman eksplisit dalam proses belajar dengan kemampuan tingkat tinggi pada situasi tertentu. ';
                     break;
                 case 5:
-                    suggestion = 'Siswa menguasai materi dengan sempurna dan bisa membantu teman. ';
+                    suggestion = 'Siswa menunjukkan pemahaman menyeluruh dalam proses belajar dengan kemampuan tingkat tinggi dalam segala situasi. ';
                     break;
             }
             

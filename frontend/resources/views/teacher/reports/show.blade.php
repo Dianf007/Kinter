@@ -396,7 +396,7 @@
         </div>
         <div class="stat-card">
             <div class="stat-value">{{ number_format($averageRating, 1) }}</div>
-            <div class="stat-label">Rata-rata Rating</div>
+            <div class="stat-label">Rata-rata Tingkat Pemahaman</div>
         </div>
         <div class="stat-card">
             <div class="stat-value">{{ $totalActivities }}</div>
@@ -440,7 +440,8 @@
             <button class="filter-btn active" data-filter="all">Semua</button>
             <button class="filter-btn" data-filter="week">Minggu Ini</button>
             <button class="filter-btn" data-filter="month">Bulan Ini</button>
-            <button class="filter-btn" data-filter="rating-5">Rating 5</button>
+            <button class="filter-btn" data-filter="rating-5">🏆 Sangat Mahir</button>
+            <button class="filter-btn" data-filter="rating-4">⭐ Mahir</button>
         </div>
 
         @if($reports->count() > 0)
@@ -468,15 +469,38 @@
                     </div>
                     
                     <div class="timeline-rating">
-                        <span style="color: var(--text-secondary); font-weight: 600;">Pemahaman:</span>
-                        <div class="rating-stars">
-                            @for($i = 1; $i <= 5; $i++)
-                                <i class="fas fa-star star {{ $i <= $report->performance_rating ? '' : 'empty' }}"></i>
-                            @endfor
+                        <span style="color: var(--text-secondary); font-weight: 600;">Tingkat Pemahaman:</span>
+                        <div class="rating-display">
+                            @php
+                                $ratingTexts = [
+                                    1 => 'Awal Berkembang',
+                                    2 => 'Mulai Berkembang', 
+                                    3 => 'Berkembang',
+                                    4 => 'Mahir',
+                                    5 => 'Sangat Mahir'
+                                ];
+                                $ratingEmojis = [
+                                    1 => '🌱',
+                                    2 => '🌿',
+                                    3 => '🌳', 
+                                    4 => '⭐',
+                                    5 => '🏆'
+                                ];
+                                $ratingColors = [
+                                    1 => '#ff6b6b',
+                                    2 => '#ffa726',
+                                    3 => '#66bb6a', 
+                                    4 => '#42a5f5',
+                                    5 => '#ab47bc'
+                                ];
+                            @endphp
+                            <span style="display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; background: {{ $ratingColors[$report->performance_rating] }}20; border-radius: 20px; border: 1px solid {{ $ratingColors[$report->performance_rating] }}40;">
+                                <span style="font-size: 1.1em;">{{ $ratingEmojis[$report->performance_rating] }}</span>
+                                <span style="color: {{ $ratingColors[$report->performance_rating] }}; font-weight: 600; font-size: 0.875rem;">
+                                    {{ $ratingTexts[$report->performance_rating] }}
+                                </span>
+                            </span>
                         </div>
-                        <span style="color: var(--text-muted); font-size: 0.875rem;">
-                            ({{ $report->performance_rating }}/5)
-                        </span>
                     </div>
                     
                     @if($report->notes)
@@ -534,6 +558,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         break;
                     case 'rating-5':
                         show = itemRating === 5;
+                        break;
+                    case 'rating-4':
+                        show = itemRating === 4;
                         break;
                     case 'all':
                     default:

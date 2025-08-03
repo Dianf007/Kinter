@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
         $this->call([
+            // Existing seeders
             CategorySeeder::class,
             TagSeeder::class,
             PortfolioSeeder::class,
@@ -31,6 +32,11 @@ class DatabaseSeeder extends Seeder
             UserPowerUpSeeder::class,
             UserBadgeSeeder::class,
             LeaderboardSeeder::class,
+            
+            // Teacher Portal seeders
+            ActivitySeeder::class,
+            StudentSeeder::class,
+            DailyReportSeeder::class,
         ]);
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('type', ['code_org', 'scratch', 'quiz', 'reading', 'math', 'science', 'art', 'music', 'physical', 'other']);
+            $table->enum('type', ['code_org', 'scratch', 'quiz', 'reading', 'math', 'science', 'art', 'music', 'physical','computer', 'other']);
             $table->text('description')->nullable();
             $table->string('icon')->nullable();
             $table->string('color', 7)->default('#667eea');

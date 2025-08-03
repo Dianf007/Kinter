@@ -68,6 +68,12 @@ class ActivitySeeder extends Seeder
                 'color' => '#f56565'
             ],
             [
+                'name' => 'Komputer',
+                'type' => 'computer',
+                'description' => 'Pembelajaran teknik penggunaan komputer',
+                'color' => '#9f7aea'
+            ],
+            [
                 'name' => 'Lainnya',
                 'type' => 'other',
                 'description' => 'Aktivitas pembelajaran lainnya',

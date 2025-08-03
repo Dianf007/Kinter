@@ -191,7 +191,7 @@ class TeacherReportController extends Controller
                 </div>
                 <div class="stat-box">
                     <h3>' . number_format($averageRating, 1) . '/5</h3>
-                    <p>Rata-rata Rating</p>
+                    <p>Rata-rata Tingkat Pemahaman</p>
                 </div>
                 <div class="stat-box">
                     <h3>' . $reports->sum('duration') . '</h3>
@@ -202,13 +202,29 @@ class TeacherReportController extends Controller
             <h3>Riwayat Pembelajaran</h3>';
             
         foreach($reports as $report) {
-            $stars = str_repeat('★', $report->performance_rating) . str_repeat('☆', 5 - $report->performance_rating);
+            $ratingTexts = [
+                1 => 'Awal Berkembang',
+                2 => 'Mulai Berkembang', 
+                3 => 'Berkembang',
+                4 => 'Mahir',
+                5 => 'Sangat Mahir'
+            ];
+            $ratingEmojis = [
+                1 => '🌱',
+                2 => '🌿',
+                3 => '🌳', 
+                4 => '⭐',
+                5 => '🏆'
+            ];
+            
+            $ratingDisplay = $ratingEmojis[$report->performance_rating] . ' ' . $ratingTexts[$report->performance_rating];
+            
             $html .= '
             <div class="report-item">
                 <div class="report-date">' . Carbon::parse($report->report_date)->format('d F Y') . '</div>
                 <div class="report-activity">' . $report->activity->name . '</div>
                 <p>' . $report->activity_description . '</p>
-                <div class="report-rating">Pemahaman: ' . $stars . ' (' . $report->performance_rating . '/5)</div>';
+                <div class="report-rating">Tingkat Pemahaman: ' . $ratingDisplay . '</div>';
                 
             if($report->notes) {
                 $html .= '<p><strong>Catatan:</strong> ' . $report->notes . '</p>';
