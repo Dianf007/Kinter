@@ -707,16 +707,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     suggestion = 'Siswa mulai memahami beberapa hal dasar dalam proses belajar dan mulai menggunakan beberapa keterampilan dalam situasi tertentu. ';
                     break;
                 case 2:
-                    suggestion = 'Siswa memahami beberapa aspek pada proses belajar dan mulai menggunakan beberapa keterampilan dalam situasi tertentu. ';
+                    suggestion = 'Anak memahami beberapa aspek pada proses belajar dan mulai menggunakan beberapa keterampilan dalam situasi tertentu. ';
                     break;
                 case 3:
-                    suggestion = 'Siswa memahami proses belajar dan menerapkan keterampilan dalam situasi tertentu. ';
+                    suggestion = 'Anak memahami proses belajar dan menerapkan keterampilan dalam situasi tertentu. ';
                     break;
                 case 4:
-                    suggestion = 'Siswa menunjukkan pemahaman eksplisit dalam proses belajar dengan kemampuan tingkat tinggi pada situasi tertentu. ';
+                    suggestion = 'Anak menunjukkan pemahaman eksplisit dalam proses belajar dengan kemampuan tingkat tinggi pada situasi tertentu. ';
                     break;
                 case 5:
-                    suggestion = 'Siswa menunjukkan pemahaman menyeluruh dalam proses belajar dengan kemampuan tingkat tinggi dalam segala situasi. ';
+                    suggestion = 'Anak menunjukkan pemahaman menyeluruh dalam proses belajar dengan kemampuan tingkat tinggi dalam segala situasi. ';
                     break;
             }
             

@@ -15,24 +15,24 @@ class StudentSeeder extends Seeder
     {
         $students = [
             [
-                'student_id' => 'STU001',
-                'name' => 'Ahmad Rizki',
-                'class' => '5A',
-                'email' => 'ahmad.rizki@student.id',
+                'student_id' => 'PK001',
+                'name' => 'Himawari no Youna',
+                'class' => '2',
+                'email' => 'himawari@student.id',
                 'teacher_id' => 1
             ],
             [
-                'student_id' => 'STU002',
-                'name' => 'Siti Nurhaliza',
-                'class' => '5A', 
-                'email' => 'siti.nurhaliza@student.id',
+                'student_id' => 'PK020',
+                'name' => 'Achmad Azzam Ramadhan',
+                'class' => '5', 
+                'email' => 'azzam@pondokkoding.com',
                 'teacher_id' => 1
             ],
             [
-                'student_id' => 'STU003',
-                'name' => 'Budi Santoso',
-                'class' => '5B',
-                'email' => 'budi.santoso@student.id',
+                'student_id' => 'PK002',
+                'name' => 'Keanu Dian A.',
+                'class' => '2',
+                'email' => 'keanu@pondokkoding.com',
                 'teacher_id' => 1
             ],
             [
