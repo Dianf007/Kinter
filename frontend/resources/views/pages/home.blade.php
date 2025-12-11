@@ -84,7 +84,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-9">
                 <div class="section-title text-center mb-60">
-                    <h2 class="title">Welcome to Our Kinter</h2>
+                    <h2 class="title">Welcome to Our Classes</h2>
                     <p>Here is what you can expect from a house cleaning from a Handy professional. Download the app
                         to share further cleaning details and instructions!</p>
                 </div>
@@ -174,6 +174,35 @@
 <!-- about area end -->
 
 <!-- class area start -->
+<!-- latest project area start -->
+<section class="project-area pt-110 pb-80">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-9">
+                <div class="section-title text-center mb-60">
+                    <h2 class="title">Our Latest Project</h2>
+                    <p>Discover our newest initiatives and creative projects designed to inspire and empower our students. Stay tuned for updates and highlights!</p>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            @foreach($latestProjects ?? [] as $project)
+            <div class="col-xl-4 col-lg-4 col-md-6">
+                <div class="project-item mb-30">
+                    <div class="project-img">
+                        <img src="{{ asset($project->image) }}" alt="{{ $project->title }}">
+                    </div>
+                    <div class="project-content">
+                        <h4 class="title"><a href="{{ $project->link ?? '#' }}">{{ $project->title }}</a></h4>
+                        <p>{{ $project->description }}</p>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+<!-- latest project area end -->
 <section class="class-area pt-110 pb-110">
     <div class="container">
         <div class="row justify-content-center">
@@ -323,9 +352,9 @@
             <div class="col-xl-4 col-lg-4 col-md-6">
                 <div class="blog-item mb-30">
                     <div class="blog-image">
-                        <a href="{{ route('blog.show', $post) }}">
+                        <!-- <a href="{{ route('blog.show', $post) }}"> -->
                             <img src="{{ asset($post->image) }}" alt="{{ $post->title }}">
-                        </a>
+                        <!-- </a> -->
                     </div>
                     <div class="blog-content">
                         <h4 class="blog-title">

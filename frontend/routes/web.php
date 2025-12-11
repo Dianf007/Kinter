@@ -11,6 +11,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\TeacherReportController;
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminKidProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,4 +70,14 @@ Route::prefix('teacher')->name('teacher.')->group(function() {
     Route::post('/reports/{student}/export-pdf', [TeacherReportController::class, 'exportPDF'])->name('reports.export-pdf');
     Route::post('/reports/{student}/send-email', [TeacherReportController::class, 'sendEmail'])->name('reports.send-email');
     Route::get('/students', [TeacherReportController::class, 'students'])->name('students.index');
+});
+
+// Admin Auth routes
+Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('dashboard');
+    Route::resource('kid-projects', AdminKidProjectController::class)->except(['show']);
 });

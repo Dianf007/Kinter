@@ -33,7 +33,7 @@ class PostSeeder extends Seeder
             'slug' => Str::slug('Galeri Hasil Karya Siswa'),
             'excerpt' => 'Lihat beberapa hasil karya kreatif dari siswa Pondok Koding.',
             'content' => 'Berikut adalah beberapa hasil proyek yang telah dibuat oleh siswa kami, mulai dari aplikasi sederhana, website responsif, hingga skrip PHP kompleks.',
-            'image' => null,
+            'image' => 'assets/img/blog/blog01.jpg',
             'post_type' => 'gallery',
             'video_link' => null,
             'author_id' => 1,
