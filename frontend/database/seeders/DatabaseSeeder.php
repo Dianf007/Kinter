@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
         $this->call([
+            AdminSeeder::class,
             // Existing seeders
             CategorySeeder::class,
             TagSeeder::class,
@@ -37,6 +38,11 @@ class DatabaseSeeder extends Seeder
             ActivitySeeder::class,
             StudentSeeder::class,
             DailyReportSeeder::class,
+                SchoolSeeder::class,
+                ClassroomSeeder::class,
+                TeacherSeeder::class,
+                SubjectSeeder::class,
+                RoomSeeder::class,
         ]);
     }
 }

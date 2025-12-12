@@ -20,6 +20,14 @@ class AdminAuthController extends Controller
         $admin = Admin::where('username', $request->username)->first();
         if ($admin && Hash::check($request->password, $admin->password)) {
             Session::put('admin_id', $admin->id);
+            Session::put('admin_role', $admin->role ?? 'admin');
+            Session::put('admin_school_id', $admin->school_id);
+            // superadmin bisa punya banyak sekolah
+            try {
+                Session::put('admin_school_ids', $admin->managedSchools()->pluck('schools.id')->toArray());
+            } catch (\Throwable $e) {
+                Session::put('admin_school_ids', []);
+            }
             return redirect()->route('admin.dashboard');
         }
         return back()->with('error', 'Invalid credentials');
@@ -34,6 +42,9 @@ class AdminAuthController extends Controller
     public function logout()
     {
         Session::forget('admin_id');
+        Session::forget('admin_role');
+        Session::forget('admin_school_id');
+        Session::forget('admin_school_ids');
         return redirect()->route('admin.login');
     }
 }

@@ -13,6 +13,8 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\TeacherReportController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminKidProjectController;
+use App\Http\Controllers\AdminScheduleController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -77,7 +79,14 @@ Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name(
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function () {
     Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('dashboard');
-    Route::resource('kid-projects', AdminKidProjectController::class)->except(['show']);
+
+    Route::resource('kid-projects', AdminKidProjectController::class)
+        ->except(['show'])
+        ->middleware('admin.role:admin,superadmin,ultraadmin');
+
+    Route::resource('schedules', AdminScheduleController::class)
+        ->except(['show'])
+        ->middleware('admin.role:admin,superadmin,ultraadmin');
 });

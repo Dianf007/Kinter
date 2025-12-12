@@ -209,21 +209,42 @@
         @php $adminLoggedIn = session('admin_id'); @endphp
         @if($adminLoggedIn)
             <nav class="admin-sidebar" id="adminSidebar">
-                <div class="admin-sidebar__brand">{{ config('app.name', 'Kinter') }} Admin</div>
+                @php
+                    $adminRole = session('admin_role', 'admin');
+                    $roleLabel = match($adminRole) {
+                        'ultraadmin' => 'Ultra Admin',
+                        'superadmin' => 'Super Admin',
+                        'admin' => 'Admin',
+                        default => 'Admin',
+                    };
+                @endphp
+                <div class="admin-sidebar__brand">{{ config('app.name', 'Kinter') }} <span style="opacity:.85">{{ $roleLabel }}</span></div>
                 <div class="admin-sidebar__menu">
                     <div class="admin-sidebar__section">
                         <a href="{{ route('admin.dashboard') }}" class="admin-sidebar__link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                             <i class="fas fa-home"></i> Dashboard
                         </a>
                     </div>
-                    <div class="admin-sidebar__section">
-                        <div class="admin-sidebar__section-title"><i class="fas fa-folder-open"></i> Project</div>
-                        <div class="admin-sidebar__submenu">
-                            <a href="{{ route('admin.kid-projects.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.kid-projects.*') ? 'active' : '' }}">
-                                <i class="fas fa-cube"></i> Scratch
-                            </a>
+                    @if(in_array($adminRole, ['admin','superadmin','ultraadmin'], true))
+                        <div class="admin-sidebar__section">
+                            <div class="admin-sidebar__section-title"><i class="fas fa-folder-open"></i> Project</div>
+                            <div class="admin-sidebar__submenu">
+                                <a href="{{ route('admin.kid-projects.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.kid-projects.*') ? 'active' : '' }}">
+                                    <i class="fas fa-cube"></i> Scratch
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    @endif
+                    @if(in_array($adminRole, ['admin','superadmin','ultraadmin'], true))
+                        <div class="admin-sidebar__section">
+                            <div class="admin-sidebar__section-title"><i class="fas fa-calendar-alt"></i> Jadwal</div>
+                            <div class="admin-sidebar__submenu">
+                                <a href="{{ route('admin.schedules.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.schedules.*') ? 'active' : '' }}">
+                                    <i class="fas fa-calendar-week"></i> Jadwal Kelas
+                                </a>
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 <div class="admin-sidebar__bottom">
                     @hasSection('admin-navbar')

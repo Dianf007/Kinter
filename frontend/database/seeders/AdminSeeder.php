@@ -8,9 +8,10 @@ class AdminSeeder extends Seeder
     public function run()
     {
         Admin::updateOrCreate([
-            'username' => 'admin',
+            'username' => 'adminUA',
         ], [
-            'password' => Hash::make('pondokkoding'),
+            'password' => Hash::make('Pondokkoding!23'),
+            'role' => 'ultraadmin',
         ]);
     }
 }
