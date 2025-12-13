@@ -264,7 +264,7 @@
                     @hasSection('admin-navbar')
                         @yield('admin-navbar')
                     @else
-                        <a href="{{ route('admin.logout') }}" class="admin-btn admin-btn--outline admin-sidebar__logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        <a href="{{ route('admin.logout') }}" class="admin-btn admin-btn--outline admin-sidebar__logout" style="color:#fff;font-weight:700;"><i class="fas fa-sign-out-alt"></i> Logout</a>
                     @endif
                 </div>
                 <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button>

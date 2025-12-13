@@ -91,6 +91,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
         ->except(['show'])
         ->middleware('admin.role:admin,superadmin,ultraadmin');
 
+    // DataTables server-side endpoint (must be before resource to avoid {classroom}=data)
+    Route::get('classrooms/data', [ClassroomController::class, 'data'])
+        ->name('classrooms.data')
+        ->middleware('admin.role:admin,superadmin');
+
     // Classroom CRUD
     Route::resource('classrooms', ClassroomController::class)
         ->except(['show'])
