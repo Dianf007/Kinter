@@ -15,7 +15,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminKidProjectController;
 use App\Http\Controllers\AdminScheduleController;
 use App\Http\Controllers\AdminManagementController;
-
+use App\Http\Controllers\ClassroomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +90,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::resource('schedules', AdminScheduleController::class)
         ->except(['show'])
         ->middleware('admin.role:admin,superadmin,ultraadmin');
+
+    // Classroom CRUD
+    Route::resource('classrooms', ClassroomController::class)
+        ->except(['show'])
+        ->middleware('admin.role:admin,superadmin');
 
     // DataTables server-side endpoint (must be before resource to avoid {admin}=data)
     Route::get('admins/data', [AdminManagementController::class, 'data'])

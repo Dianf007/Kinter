@@ -239,6 +239,9 @@
                         <div class="admin-sidebar__section">
                             <div class="admin-sidebar__section-title"><i class="fas fa-calendar-alt"></i> Jadwal</div>
                             <div class="admin-sidebar__submenu">
+                                <a href="{{ route('admin.classrooms.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.classrooms.*') ? 'active' : '' }}">
+                                    <i class="fas fa-chalkboard"></i> Kelas
+                                </a>
                                 <a href="{{ route('admin.schedules.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.schedules.*') ? 'active' : '' }}">
                                     <i class="fas fa-calendar-week"></i> Jadwal Kelas
                                 </a>
@@ -308,6 +311,7 @@
             }
         });
     </script>
+    <script src="{{ asset('assets/js/jquery-3.5.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     @stack('scripts')
 </body>
