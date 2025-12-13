@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->call([
             AdminSeeder::class,
+            AdminRoleSeeder::class,
             // Existing seeders
             CategorySeeder::class,
             TagSeeder::class,
@@ -43,6 +44,7 @@ class DatabaseSeeder extends Seeder
                 TeacherSeeder::class,
                 SubjectSeeder::class,
                 RoomSeeder::class,
+                DemoAcademySeeder::class,
         ]);
     }
 }

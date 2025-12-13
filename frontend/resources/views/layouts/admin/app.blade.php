@@ -245,6 +245,17 @@
                             </div>
                         </div>
                     @endif
+
+                    @if(in_array($adminRole, ['superadmin','ultraadmin'], true))
+                        <div class="admin-sidebar__section">
+                            <div class="admin-sidebar__section-title"><i class="fas fa-users-cog"></i> User Management</div>
+                            <div class="admin-sidebar__submenu">
+                                <a href="{{ route('admin.admins.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.admins.*') ? 'active' : '' }}">
+                                    <i class="fas fa-user-shield"></i> Kelola Admin
+                                </a>
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 <div class="admin-sidebar__bottom">
                     @hasSection('admin-navbar')

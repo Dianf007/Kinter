@@ -14,6 +14,7 @@ use App\Http\Controllers\TeacherReportController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminKidProjectController;
 use App\Http\Controllers\AdminScheduleController;
+use App\Http\Controllers\AdminManagementController;
 
 
 /*
@@ -89,4 +90,13 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::resource('schedules', AdminScheduleController::class)
         ->except(['show'])
         ->middleware('admin.role:admin,superadmin,ultraadmin');
+
+    // DataTables server-side endpoint (must be before resource to avoid {admin}=data)
+    Route::get('admins/data', [AdminManagementController::class, 'data'])
+        ->name('admins.data')
+        ->middleware('admin.role:superadmin,ultraadmin');
+
+    Route::resource('admins', AdminManagementController::class)
+        ->except(['show'])
+        ->middleware('admin.role:superadmin,ultraadmin');
 });
