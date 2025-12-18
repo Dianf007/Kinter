@@ -13,10 +13,30 @@
     <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.css') }}">
     <style>
         :root {
-            --admin-primary: #4b6bfb;
-            --admin-secondary: #7f63f4;
-            --admin-bg: #f5f7fb;
-            --admin-dark: #1c1f2e;
+            --admin-primary: #6366f1;
+            --admin-secondary: #8b5cf6;
+            --admin-success: #10b981;
+            --admin-warning: #f59e0b;
+            --admin-danger: #ef4444;
+            --admin-info: #3b82f6;
+            
+            --admin-bg: #f8fafc;
+            --admin-card-bg: #ffffff;
+            --admin-dark: #1e293b;
+            --admin-text: #334155;
+            --admin-text-light: #64748b;
+            --admin-border: #e2e8f0;
+            --admin-shadow: rgba(0, 0, 0, 0.05);
+        }
+        
+        [data-theme="dark"] {
+            --admin-bg: #0f172a;
+            --admin-card-bg: #1e293b;
+            --admin-dark: #f1f5f9;
+            --admin-text: #e2e8f0;
+            --admin-text-light: #94a3b8;
+            --admin-border: #334155;
+            --admin-shadow: rgba(0, 0, 0, 0.3);
         }
         *, *::before, *::after {
             box-sizing: border-box;
@@ -25,12 +45,11 @@
             margin: 0;
             min-height: 100vh;
             font-family: 'Poppins', sans-serif;
-            background: radial-gradient(circle at top, rgba(75,107,251,0.15), transparent 45%),
-                        radial-gradient(circle at bottom, rgba(127,99,244,0.2), transparent 50%),
-                        var(--admin-bg);
-            color: var(--admin-dark);
+            background: var(--admin-bg);
+            color: var(--admin-text);
             display: flex;
             flex-direction: column;
+            transition: background 0.3s ease, color 0.3s ease;
         }
         .admin-shell {
             flex: 1;
@@ -39,75 +58,111 @@
             min-height: 100vh;
         }
         .admin-sidebar {
-            width: 240px;
-            min-width: 200px;
-            background: linear-gradient(135deg, var(--admin-primary) 60%, var(--admin-secondary) 100%);
-            color: #fff;
+            width: 260px;
+            min-width: 260px;
+            background: var(--admin-card-bg);
+            border-right: 1px solid var(--admin-border);
+            color: var(--admin-text);
             display: flex;
             flex-direction: column;
             align-items: stretch;
-            padding: 32px 0 24px 0;
+            padding: 24px 0;
             position: relative;
             z-index: 100;
-            transition: transform 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.2s;
-            box-shadow: 0 0 32px 0 rgba(75,107,251,0.10);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px var(--admin-shadow);
         }
         .admin-sidebar__brand {
             font-weight: 700;
-            font-size: 1.25rem;
-            letter-spacing: 0.5px;
-            padding: 0 32px 24px 32px;
-            margin-bottom: 12px;
-            color: #fff;
+            font-size: 1.375rem;
+            letter-spacing: -0.5px;
+            padding: 0 24px 20px 24px;
+            margin-bottom: 16px;
+            color: var(--admin-text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--admin-border);
+        }
+        .admin-sidebar__brand span {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 4px 10px;
+            background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+            color: white;
+            border-radius: 6px;
+            opacity: 0.9;
         }
         .admin-sidebar__menu {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            padding: 0 16px;
+            gap: 4px;
+            padding: 0 12px;
+            flex: 1;
+            overflow-y: auto;
         }
         .admin-sidebar__section {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
         .admin-sidebar__section-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 6px;
-            margin-left: 8px;
-            letter-spacing: 0.5px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--admin-text-light);
+            margin-bottom: 8px;
+            padding: 8px 12px 4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
         .admin-sidebar__submenu {
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            margin-left: 18px;
+            gap: 2px;
         }
         .admin-sidebar__link {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px 18px;
-            border-radius: 12px;
-            font-size: 1rem;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
             font-weight: 500;
-            color: #fff;
+            color: var(--admin-text);
             text-decoration: none;
-            opacity: 0.92;
-            transition: background 0.2s, color 0.2s, opacity 0.2s;
+            transition: all 0.2s ease;
+            position: relative;
         }
-        .admin-sidebar__link.active, .admin-sidebar__link:hover {
-            background: rgba(255,255,255,0.13);
-            color: #fff;
-            opacity: 1;
+        .admin-sidebar__link i {
+            width: 20px;
+            text-align: center;
+            color: var(--admin-text-light);
+            transition: color 0.2s ease;
+        }
+        .admin-sidebar__link:hover {
+            background: var(--admin-bg);
+            color: var(--admin-primary);
+        }
+        .admin-sidebar__link:hover i {
+            color: var(--admin-primary);
+        }
+        .admin-sidebar__link.active {
+            background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+        .admin-sidebar__link.active i {
+            color: white;
         }
         .admin-sidebar__bottom {
             margin-top: auto;
-            padding: 0 16px;
+            padding: 16px 12px 0;
+            border-top: 1px solid var(--admin-border);
         }
         .admin-sidebar__logout {
             width: 100%;
-            margin-top: 18px;
+            margin-top: 0;
+            justify-content: center;
+            gap: 8px;
         }
         .admin-main {
             flex: 1;
@@ -118,15 +173,16 @@
         }
         .admin-topbar {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
             gap: 12px;
             margin-bottom: 16px;
-            padding: 10px 14px;
+            padding: 12px 18px;
             border-radius: 16px;
-            background: rgba(255,255,255,0.85);
-            border: 1px solid rgba(75,107,251,0.10);
-            backdrop-filter: blur(8px);
+            background: var(--admin-card-bg);
+            border: 1px solid var(--admin-border);
+            box-shadow: 0 1px 3px var(--admin-shadow);
+            transition: all 0.3s ease;
         }
         .admin-topbar__label {
             font-weight: 600;
@@ -136,16 +192,18 @@
             max-width: 340px;
         }
         .admin-card {
-            background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 25px 60px rgba(28,31,46,0.12);
-            border: 1px solid rgba(75,107,251,0.08);
+            background: var(--admin-card-bg);
+            border-radius: 16px;
+            box-shadow: 0 1px 3px var(--admin-shadow);
+            border: 1px solid var(--admin-border);
             overflow: hidden;
+            transition: all 0.3s ease;
         }
         .admin-card__header {
-            padding: 24px;
+            padding: 20px 24px;
             background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
             color: #ffffff;
+            border-bottom: 1px solid var(--admin-border);
         }
         .admin-card__body {
             padding: 24px;
@@ -160,12 +218,18 @@
         .admin-btn--outline {
             background: transparent;
             color: var(--admin-primary);
-            border: 1px solid rgba(75,107,251,0.4);
+            border: 1px solid var(--admin-border);
+            transition: all 0.2s ease;
+        }
+        .admin-btn--outline:hover {
+            background: var(--admin-primary);
+            color: #fff;
+            border-color: var(--admin-primary);
         }
         .admin-btn--solid {
             background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
             color: #fff;
-            box-shadow: 0 12px 20px rgba(75,107,251,0.35);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
         .admin-btn:hover {
             transform: translateY(-2px);
@@ -173,19 +237,25 @@
         }
         .sidebar-toggle {
             display: none;
-            position: absolute;
-            top: 18px;
-            right: -44px;
-            background: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 38px;
-            height: 38px;
-            box-shadow: 0 2px 8px rgba(28,31,46,0.10);
-            color: var(--admin-primary);
-            font-size: 1.5rem;
-            z-index: 200;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--admin-card-bg);
+            border: 1px solid var(--admin-border);
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 2px 8px var(--admin-shadow);
+            color: var(--admin-text);
+            font-size: 1.2rem;
+            z-index: 999;
             cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .sidebar-toggle:hover {
+            background: var(--admin-primary);
+            color: white;
+            border-color: var(--admin-primary);
         }
         @media (max-width: 1024px) {
             .admin-shell {
@@ -198,16 +268,17 @@
                 height: 100vh;
                 transform: translateX(-100%);
                 box-shadow: 0 0 0 rgba(0,0,0,0);
+                z-index: 1000;
             }
             .admin-sidebar.open {
                 transform: translateX(0);
-                box-shadow: 0 0 32px 0 rgba(75,107,251,0.18);
+                box-shadow: 4px 0 20px var(--admin-shadow);
             }
             .sidebar-toggle {
                 display: block;
             }
             .admin-main {
-                padding: 24px 8px 24px 8px;
+                padding: 20px 12px;
             }
         }
         @media (max-width: 576px) {
@@ -237,32 +308,38 @@
                         default => 'Admin',
                     };
                 @endphp
-                <div class="admin-sidebar__brand">{{ config('app.name', 'Kinter') }} <span style="opacity:.85">{{ $roleLabel }}</span></div>
+                <div class="admin-sidebar__brand">
+                    <i class="fas fa-graduation-cap" style="color: var(--admin-primary); font-size: 1.5rem;"></i>
+                    <div style="flex: 1;">
+                        <div>{{ config('app.name', 'EduAdmin') }}</div>
+                        <span>{{ $roleLabel }}</span>
+                    </div>
+                </div>
                 <div class="admin-sidebar__menu">
                     <div class="admin-sidebar__section">
                         <a href="{{ route('admin.dashboard') }}" class="admin-sidebar__link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                            <i class="fas fa-home"></i> Dashboard
+                            <i class="fas fa-home"></i> <span>Dashboard</span>
                         </a>
                     </div>
                     @if(in_array($adminRole, ['admin','superadmin','ultraadmin'], true))
                         <div class="admin-sidebar__section">
-                            <div class="admin-sidebar__section-title"><i class="fas fa-folder-open"></i> Project</div>
+                            <div class="admin-sidebar__section-title">Project</div>
                             <div class="admin-sidebar__submenu">
                                 <a href="{{ route('admin.kid-projects.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.kid-projects.*') ? 'active' : '' }}">
-                                    <i class="fas fa-cube"></i> Scratch
+                                    <i class="fas fa-cube"></i> <span>Scratch</span>
                                 </a>
                             </div>
                         </div>
                     @endif
                     @if(in_array($adminRole, ['admin','superadmin','ultraadmin'], true))
                         <div class="admin-sidebar__section">
-                            <div class="admin-sidebar__section-title"><i class="fas fa-calendar-alt"></i> Jadwal</div>
+                            <div class="admin-sidebar__section-title">Management</div>
                             <div class="admin-sidebar__submenu">
                                 <a href="{{ route('admin.classrooms.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.classrooms.*') ? 'active' : '' }}">
-                                    <i class="fas fa-chalkboard"></i> Kelas
+                                    <i class="fas fa-chalkboard"></i> <span>Kelas</span>
                                 </a>
                                 <a href="{{ route('admin.schedules.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.schedules.*') ? 'active' : '' }}">
-                                    <i class="fas fa-calendar-week"></i> Jadwal Kelas
+                                    <i class="fas fa-calendar-week"></i> <span>Jadwal</span>
                                 </a>
                             </div>
                         </div>
@@ -270,21 +347,22 @@
 
                     @if(in_array($adminRole, ['superadmin','ultraadmin'], true))
                         <div class="admin-sidebar__section">
-                            <div class="admin-sidebar__section-title"><i class="fas fa-users-cog"></i> User Management</div>
+                            <div class="admin-sidebar__section-title">Settings</div>
                             <div class="admin-sidebar__submenu">
                                 <a href="{{ route('admin.admins.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.admins.*') ? 'active' : '' }}">
-                                    <i class="fas fa-user-shield"></i> Kelola Admin
+                                    <i class="fas fa-user-shield"></i> <span>Admin Users</span>
                                 </a>
                             </div>
                         </div>
                     @endif
                 </div>
                 <div class="admin-sidebar__bottom">
-                    @hasSection('admin-navbar')
-                        @yield('admin-navbar')
-                    @else
-                        <a href="{{ route('admin.logout') }}" class="admin-btn admin-btn--outline admin-sidebar__logout" style="color:#fff;font-weight:700;"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                    @endif
+                    <form method="POST" action="{{ route('admin.logout') }}" style="width: 100%;">
+                        @csrf
+                        <button type="submit" class="admin-sidebar__link" style="width: 100%; border: none; background: none; cursor: pointer; text-align: left;">
+                            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                        </button>
+                    </form>
                 </div>
                 <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button>
             </nav>
@@ -300,33 +378,76 @@
                 @endphp
 
                 <div class="admin-topbar">
-                    <span class="admin-topbar__label">Sekolah:</span>
-                    <strong>{{ $currentSchoolName }}</strong>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-school" style="color: var(--admin-primary);"></i>
+                            <div>
+                                <div class="text-muted small">Sekolah</div>
+                                <strong style="color: var(--admin-text);">{{ $currentSchoolName }}</strong>
+                            </div>
+                        </div>
 
-                    @if($canSwitchSchool)
-                        <form method="POST" action="{{ route('admin.school.switch') }}" class="d-flex align-items-center gap-2 mb-0">
-                            @csrf
-                            <select name="school_id" class="form-select" onchange="this.form.submit()" aria-label="Switch school">
-                                @foreach($availableSchools as $school)
-                                    <option value="{{ $school->id }}" {{ (int) session('admin_school_id') === (int) $school->id ? 'selected' : '' }}>
-                                        {{ $school->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </form>
-                    @endif
+                        @if($canSwitchSchool)
+                            <form method="POST" action="{{ route('admin.school.switch') }}" class="d-flex align-items-center gap-2 mb-0">
+                                @csrf
+                                <select name="school_id" class="form-select form-select-sm" onchange="this.form.submit()" aria-label="Switch school" style="min-width: 200px;">
+                                    @foreach($availableSchools as $school)
+                                        <option value="{{ $school->id }}" {{ (int) session('admin_school_id') === (int) $school->id ? 'selected' : '' }}>
+                                            {{ $school->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </form>
+                        @endif
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <button id="themeToggle" class="admin-btn admin-btn--outline" style="padding: 8px 12px;" title="Toggle Dark Mode">
+                            <i class="fas fa-moon" id="themeIcon"></i>
+                        </button>
+                    </div>
                 </div>
             @endif
             @yield('content')
         </main>
     </div>
     <script>
+        // Theme Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const htmlElement = document.documentElement;
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('adminTheme') || 'light';
+            htmlElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+            
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    const currentTheme = htmlElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    
+                    htmlElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('adminTheme', newTheme);
+                    updateThemeIcon(newTheme);
+                });
+            }
+            
+            function updateThemeIcon(theme) {
+                if (themeIcon) {
+                    themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+        });
+
         // Sidebar toggle for desktop and mobile
         document.addEventListener('DOMContentLoaded', function() {
             var sidebar = document.getElementById('adminSidebar');
             var toggle = document.getElementById('sidebarToggle');
             var main = document.querySelector('.admin-main');
             function toggleSidebar() {
+                if (!sidebar) return;
                 sidebar.classList.toggle('open');
                 if (sidebar.classList.contains('open')) {
                     main.style.filter = 'blur(2px)';
@@ -339,22 +460,10 @@
             }
             // Close sidebar when clicking outside (mobile)
             document.addEventListener('click', function(e) {
-                if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+                if (sidebar && sidebar.classList.contains('open') && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
                     toggleSidebar();
                 }
             });
-        });
-    </script>
-    <script>
-        // Sidebar toggle for mobile
-        document.addEventListener('DOMContentLoaded', function() {
-            var sidebar = document.getElementById('adminSidebar');
-            var toggle = document.getElementById('sidebarToggle');
-            if (sidebar && toggle) {
-                toggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('open');
-                });
-            }
         });
     </script>
     <script src="{{ asset('assets/js/jquery-3.5.1.min.js') }}"></script>
