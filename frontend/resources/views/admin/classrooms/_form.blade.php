@@ -5,7 +5,7 @@
         <select name="school_id" id="school_id" class="form-select select2" required>
             <option value="">Pilih Sekolah</option>
             @foreach($schools as $school)
-                <option value="{{ $school->id }}" {{ old('school_id', $classroom->school_id ?? '') == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
+                <option value="{{ $school->id }}" {{ old('school_id', $classroom->school_id ?? session('admin_school_id') ?? '') == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
             @endforeach
         </select>
     </div>

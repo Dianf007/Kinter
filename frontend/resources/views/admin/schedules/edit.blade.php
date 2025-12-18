@@ -11,7 +11,7 @@
                 <select name="school_id" class="form-select" required>
                     <option value="">-- Pilih Sekolah --</option>
                     @foreach($schools as $school)
-                        <option value="{{ $school->id }}" @if($schedule->school_id == $school->id) selected @endif>{{ $school->name }}</option>
+                        <option value="{{ $school->id }}" @if((int) $schedule->school_id === (int) $school->id) selected @endif>{{ $school->name }}</option>
                     @endforeach
                 </select>
             </div>

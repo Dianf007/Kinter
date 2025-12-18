@@ -46,6 +46,12 @@ class ClassroomController extends Controller
     {
         $query->whereIn('school_id', $this->allowedSchoolIds());
 
+        // Default to current school context if no explicit filter.
+        $currentSchoolId = Session::get('admin_school_id');
+        if (($request->input('school_id') === null || $request->input('school_id') === '') && $currentSchoolId) {
+            $query->where('school_id', (int) $currentSchoolId);
+        }
+
         $schoolId = $request->input('school_id');
         if ($schoolId !== null && $schoolId !== '') {
             $schoolId = (int) $schoolId;

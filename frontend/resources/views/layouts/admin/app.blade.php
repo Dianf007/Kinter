@@ -116,6 +116,25 @@
             padding: 32px 32px 32px 0;
             min-width: 0;
         }
+        .admin-topbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 10px 14px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.85);
+            border: 1px solid rgba(75,107,251,0.10);
+            backdrop-filter: blur(8px);
+        }
+        .admin-topbar__label {
+            font-weight: 600;
+            color: var(--admin-dark);
+        }
+        .admin-topbar select {
+            max-width: 340px;
+        }
         .admin-card {
             background: #ffffff;
             border-radius: 24px;
@@ -271,6 +290,33 @@
             </nav>
         @endif
         <main class="admin-main">
+            @if($adminLoggedIn)
+                @php
+                    $role = session('admin_role', 'admin');
+                    $canSwitchSchool = in_array($role, ['superadmin', 'ultraadmin'], true);
+                    $currentSchool = $currentSchool ?? null;
+                    $availableSchools = $availableSchools ?? collect();
+                    $currentSchoolName = $currentSchool->name ?? '-';
+                @endphp
+
+                <div class="admin-topbar">
+                    <span class="admin-topbar__label">Sekolah:</span>
+                    <strong>{{ $currentSchoolName }}</strong>
+
+                    @if($canSwitchSchool)
+                        <form method="POST" action="{{ route('admin.school.switch') }}" class="d-flex align-items-center gap-2 mb-0">
+                            @csrf
+                            <select name="school_id" class="form-select" onchange="this.form.submit()" aria-label="Switch school">
+                                @foreach($availableSchools as $school)
+                                    <option value="{{ $school->id }}" {{ (int) session('admin_school_id') === (int) $school->id ? 'selected' : '' }}>
+                                        {{ $school->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </form>
+                    @endif
+                </div>
+            @endif
             @yield('content')
         </main>
     </div>

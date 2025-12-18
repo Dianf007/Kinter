@@ -13,6 +13,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\TeacherReportController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminKidProjectController;
+use App\Http\Controllers\AdminSchoolController;
 use App\Http\Controllers\AdminScheduleController;
 use App\Http\Controllers\AdminManagementController;
 use App\Http\Controllers\ClassroomController;
@@ -81,6 +82,11 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.
 Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function () {
+    // Tenant (school) selector/switcher
+    Route::get('/school/select', [AdminSchoolController::class, 'select'])->name('school.select');
+    Route::post('/school/switch', [AdminSchoolController::class, 'switch'])->name('school.switch');
+
+    Route::middleware('admin.school')->group(function () {
     Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('dashboard');
 
     Route::resource('kid-projects', AdminKidProjectController::class)
@@ -109,4 +115,6 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::resource('admins', AdminManagementController::class)
         ->except(['show'])
         ->middleware('admin.role:superadmin,ultraadmin');
+
+    });
 });

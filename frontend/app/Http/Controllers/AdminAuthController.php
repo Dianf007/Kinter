@@ -28,6 +28,14 @@ class AdminAuthController extends Controller
             } catch (\Throwable $e) {
                 Session::put('admin_school_ids', []);
             }
+            $role = (string) Session::get('admin_role', 'admin');
+            if (in_array($role, ['superadmin', 'ultraadmin'], true)) {
+                // if no school selected yet, ask to pick one
+                if (!Session::get('admin_school_id')) {
+                    return redirect()->route('admin.school.select');
+                }
+            }
+
             return redirect()->route('admin.dashboard');
         }
         return back()->with('error', 'Invalid credentials');

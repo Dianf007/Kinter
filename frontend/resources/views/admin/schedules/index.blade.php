@@ -18,7 +18,7 @@
                     <select name="school_id" class="form-select" onchange="this.form.submit()">
                         <option value="">-- Pilih Sekolah --</option>
                         @foreach($schools as $school)
-                            <option value="{{ $school->id }}" @if(request('school_id') == $school->id) selected @endif>{{ $school->name }}</option>
+                            <option value="{{ $school->id }}" @if((string) request('school_id', session('admin_school_id')) === (string) $school->id) selected @endif>{{ $school->name }}</option>
                         @endforeach
                     </select>
                 </div>
