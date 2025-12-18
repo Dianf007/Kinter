@@ -4,18 +4,42 @@
 @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
     <style>
+        .form-label {
+            color: var(--admin-text);
+        }
+        .form-text {
+            color: var(--admin-text-muted);
+        }
+        .form-select, .form-control {
+            background: var(--admin-card-bg);
+            color: var(--admin-text);
+            border: 1px solid var(--admin-border);
+        }
         .select2-container--default .select2-selection--single {
             height: calc(2.25rem + 2px);
-            border: 1px solid var(--bs-border-color);
+            border: 1px solid var(--admin-border);
             border-radius: var(--bs-border-radius);
+            background: var(--admin-card-bg);
         }
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: calc(2.25rem + 0px);
             padding-left: .75rem;
+            color: var(--admin-text);
         }
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: calc(2.25rem + 2px);
             right: .5rem;
+        }
+        .select2-dropdown {
+            background: var(--admin-card-bg);
+            border: 1px solid var(--admin-border);
+        }
+        .select2-container--default .select2-results__option {
+            color: var(--admin-text);
+        }
+        .select2-container--default .select2-results__option--highlighted {
+            background: var(--admin-primary);
+            color: #fff;
         }
     </style>
 @endpush
@@ -25,8 +49,8 @@
     <div class="admin-card">
         <div class="admin-card__header d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
-                <h4 class="mb-1">Edit Jadwal Kelas</h4>
-                <p class="mb-0">Perbarui jadwal mingguan, mapel, dan guru.</p>
+                <h4 class="mb-1" style="color: var(--admin-text);">Edit Jadwal Kelas</h4>
+                <p class="mb-0" style="color: var(--admin-text-muted);">Perbarui jadwal mingguan, mapel, dan guru.</p>
             </div>
             <a href="{{ route('admin.schedules.index') }}" class="admin-btn admin-btn--outline">Kembali</a>
         </div>

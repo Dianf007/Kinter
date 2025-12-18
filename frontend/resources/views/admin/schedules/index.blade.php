@@ -1,11 +1,30 @@
 @extends('layouts.admin.app')
+@push('styles')
+<style>
+    .form-select {
+        background: var(--admin-card-bg);
+        color: var(--admin-text);
+        border: 1px solid var(--admin-border);
+    }
+    .table {
+        color: var(--admin-text);
+    }
+    .table th {
+        color: var(--admin-text);
+        background: var(--admin-bg);
+    }
+    .text-center {
+        color: var(--admin-text-muted);
+    }
+</style>
+@endpush
 @section('content')
 <div class="dashboard-wrapper">
     <div class="admin-card">
         <div class="admin-card__header d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
-                <h4 class="mb-1">Jadwal Kelas</h4>
-                <p class="mb-0">Kelola jadwal kelas, mapel, dan guru secara profesional.</p>
+                <h4 class="mb-1" style="color: var(--admin-text);">Jadwal Kelas</h4>
+                <p class="mb-0" style="color: var(--admin-text-muted);">Kelola jadwal kelas, mapel, dan guru secara profesional.</p>
             </div>
             <a href="{{ route('admin.schedules.create') }}" class="admin-btn admin-btn--solid">+ Jadwal Baru</a>
         </div>

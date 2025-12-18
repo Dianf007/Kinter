@@ -14,8 +14,13 @@
         .filter-bar select {
             min-width: 200px;
             border-radius: 16px;
-            border: 1px solid rgba(28,31,46,0.12);
+            border: 1px solid var(--admin-border);
             padding: 10px 14px;
+            background: var(--admin-card-bg);
+            color: var(--admin-text);
+        }
+        .filter-bar input::placeholder {
+            color: var(--admin-text-muted);
         }
         @media (max-width: 576px) {
             .filter-bar input,
@@ -44,13 +49,27 @@
         }
         .dt-container .dt-search input {
             border-radius: 16px;
-            border: 1px solid rgba(28,31,46,0.12);
+            border: 1px solid var(--admin-border);
             padding: 8px 12px;
+            background: var(--admin-card-bg);
+            color: var(--admin-text);
         }
         .dt-container .dt-length select {
             border-radius: 16px;
-            border: 1px solid rgba(28,31,46,0.12);
+            border: 1px solid var(--admin-border);
             padding: 8px 12px;
+            background: var(--admin-card-bg);
+            color: var(--admin-text);
+        }
+        .table {
+            color: var(--admin-text);
+        }
+        .table th {
+            color: var(--admin-text);
+            background: var(--admin-bg);
+        }
+        .text-muted {
+            color: var(--admin-text-muted) !important;
         }
     </style>
 @endpush
@@ -59,8 +78,8 @@
     <div class="admin-card">
         <div class="admin-card__header d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
-                <h4 class="mb-1">Kelola Kelas</h4>
-                <p class="mb-0">Buat, ubah, dan atur kelas per sekolah.</p>
+                <h4 class="mb-1" style="color: var(--admin-text);">Kelola Kelas</h4>
+                <p class="mb-0" style="color: var(--admin-text-muted);">Buat, ubah, dan atur kelas per sekolah.</p>
             </div>
             <a href="{{ route('admin.classrooms.create') }}" class="admin-btn admin-btn--solid">+ Kelas Baru</a>
         </div>
