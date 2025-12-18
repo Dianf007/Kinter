@@ -35,10 +35,9 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>Tanggal</th>
+                            <th>Hari</th>
                             <th>Jam</th>
                             <th>Kelas</th>
-                            <th>Ruang</th>
                             <th>Mapel & Guru</th>
                             <th>Catatan</th>
                             <th>Aksi</th>
@@ -47,10 +46,9 @@
                     <tbody>
                         @forelse($schedules as $schedule)
                         <tr>
-                            <td>{{ $schedule->date }}</td>
+                            <td>{{ \Carbon\Carbon::parse($schedule->date)->locale('id')->isoFormat('dddd') }}</td>
                             <td>{{ $schedule->start_time }} - {{ $schedule->end_time }}</td>
                             <td>{{ $schedule->classroom->name ?? '-' }}</td>
-                            <td>{{ $schedule->room->name ?? '-' }}</td>
                             <td>
                                 @foreach($schedule->scheduleSubjectTeachers as $sst)
                                     <div><b>{{ $sst->subject->name ?? '-' }}</b> - {{ $sst->teacher->name ?? '-' }}</div>
@@ -67,7 +65,7 @@
                             </td>
                         </tr>
                         @empty
-                        <tr><td colspan="7" class="text-center">Tidak ada jadwal</td></tr>
+                        <tr><td colspan="6" class="text-center">Tidak ada jadwal</td></tr>
                         @endforelse
                     </tbody>
                 </table>

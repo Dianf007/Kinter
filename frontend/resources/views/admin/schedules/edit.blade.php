@@ -1,106 +1,203 @@
 @extends('layouts.admin.app')
+@section('title', 'Edit Jadwal Kelas')
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: calc(2.25rem + 2px);
+            border: 1px solid var(--bs-border-color);
+            border-radius: var(--bs-border-radius);
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: calc(2.25rem + 0px);
+            padding-left: .75rem;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: calc(2.25rem + 2px);
+            right: .5rem;
+        }
+    </style>
+@endpush
+
 @section('content')
-<div class="container-fluid">
-    <h1 class="mb-4">Edit Jadwal Kelas</h1>
-    <form method="POST" action="{{ route('admin.schedules.update', $schedule) }}" class="card p-4">
-        @csrf
-        @method('PUT')
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label>Sekolah</label>
-                <select name="school_id" class="form-select" required>
-                    <option value="">-- Pilih Sekolah --</option>
-                    @foreach($schools as $school)
-                        <option value="{{ $school->id }}" @if((int) $schedule->school_id === (int) $school->id) selected @endif>{{ $school->name }}</option>
-                    @endforeach
-                </select>
+<div class="dashboard-wrapper">
+    <div class="admin-card">
+        <div class="admin-card__header d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h4 class="mb-1">Edit Jadwal Kelas</h4>
+                <p class="mb-0">Perbarui jadwal mingguan, mapel, dan guru.</p>
             </div>
-            <div class="col-md-4">
-                <label>Kelas</label>
-                <select name="classroom_id" class="form-select" required>
-                    <option value="">-- Pilih Kelas --</option>
-                    @foreach($classrooms as $classroom)
-                        <option value="{{ $classroom->id }}" @if($schedule->classroom_id == $classroom->id) selected @endif>{{ $classroom->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label>Ruang</label>
-                <select name="room_id" class="form-select" required>
-                    <option value="">-- Pilih Ruang --</option>
-                    @foreach($rooms as $room)
-                        <option value="{{ $room->id }}" @if($schedule->room_id == $room->id) selected @endif>{{ $room->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+            <a href="{{ route('admin.schedules.index') }}" class="admin-btn admin-btn--outline">Kembali</a>
         </div>
-        <div class="row mb-3">
-            <div class="col-md-3">
-                <label>Tanggal</label>
-                <input type="date" name="date" class="form-control" value="{{ $schedule->date }}" required>
-            </div>
-            <div class="col-md-3">
-                <label>Jam Mulai</label>
-                <input type="time" name="start_time" class="form-control" value="{{ $schedule->start_time }}" required>
-            </div>
-            <div class="col-md-3">
-                <label>Jam Selesai</label>
-                <input type="time" name="end_time" class="form-control" value="{{ $schedule->end_time }}" required>
-            </div>
-            <div class="col-md-3">
-                <label>Catatan</label>
-                <input type="text" name="note" class="form-control" value="{{ $schedule->note }}">
-            </div>
-        </div>
-        <div class="mb-3">
-            <label>Mapel & Guru (multi)</label>
-            <div id="mapel-guru-list">
-                @foreach($schedule->scheduleSubjectTeachers as $i => $sst)
-                <div class="row mb-2">
-                    <div class="col-md-5">
-                        <select name="subject_ids[]" class="form-select" required>
-                            <option value="">-- Pilih Mapel --</option>
-                            @foreach($subjects as $subject)
-                                <option value="{{ $subject->id }}" @if($sst->subject_id == $subject->id) selected @endif>{{ $subject->name }}</option>
+
+        <div class="admin-card__body">
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <div class="fw-semibold mb-1">Periksa input:</div>
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('admin.schedules.update', $schedule) }}">
+                @csrf
+                @method('PUT')
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Sekolah</label>
+                        <select name="school_id" class="form-select" required>
+                            <option value="">-- Pilih Sekolah --</option>
+                            @foreach($schools as $school)
+                                <option value="{{ $school->id }}" {{ (int) old('school_id', $schedule->school_id) === (int) $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-5">
-                        <select name="teacher_ids[]" class="form-select" required>
-                            <option value="">-- Pilih Guru --</option>
-                            @foreach($teachers as $teacher)
-                                <option value="{{ $teacher->id }}" @if($sst->teacher_id == $teacher->id) selected @endif>{{ $teacher->name }}</option>
+                    <div class="col-md-6">
+                        <label class="form-label">Kelas</label>
+                        <select name="classroom_id" class="form-select" required>
+                            <option value="">-- Pilih Kelas --</option>
+                            @foreach($classrooms as $classroom)
+                                <option value="{{ $classroom->id }}" {{ (int) old('classroom_id', $schedule->classroom_id) === (int) $classroom->id ? 'selected' : '' }}>{{ $classroom->name }}</option>
                             @endforeach
                         </select>
-                    </div>
-                    <div class="col-md-2">
-                        @if($i == 0)
-                        <button type="button" class="btn btn-success add-mapel-guru">+</button>
-                        @else
-                        <button type="button" class="btn btn-danger remove-mapel-guru">-</button>
-                        @endif
+                        <div class="form-text">Ruang mengikuti kelas (otomatis).</div>
                     </div>
                 </div>
-                @endforeach
-            </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Hari</label>
+                        <select name="day_of_week" class="form-select" required>
+                            @php
+                                $days = [
+                                    1 => 'Senin',
+                                    2 => 'Selasa',
+                                    3 => 'Rabu',
+                                    4 => 'Kamis',
+                                    5 => 'Jumat',
+                                    6 => 'Sabtu',
+                                    7 => 'Minggu',
+                                ];
+                                $currentDow = (int) (old('day_of_week') ?: ($schedule->date ? \Carbon\Carbon::parse($schedule->date)->dayOfWeekIso : 1));
+                            @endphp
+                            @foreach($days as $k => $label)
+                                <option value="{{ $k }}" {{ $currentDow === $k ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Jam Mulai</label>
+                        <input type="time" name="start_time" class="form-control" value="{{ old('start_time', $schedule->start_time) }}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Jam Selesai</label>
+                        <input type="time" name="end_time" class="form-control" value="{{ old('end_time', $schedule->end_time) }}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Catatan</label>
+                        <input type="text" name="note" class="form-control" value="{{ old('note', $schedule->note) }}" placeholder="Opsional">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                        <label class="form-label mb-0">Mapel & Guru (multi)</label>
+                        <button type="button" class="admin-btn admin-btn--solid add-mapel-guru">+ Tambah Baris</button>
+                    </div>
+                    <div id="mapel-guru-list">
+                        @forelse($schedule->scheduleSubjectTeachers as $i => $sst)
+                            <div class="row g-2 align-items-start mb-2 mapel-guru-row">
+                                <div class="col-md-5">
+                                    <select name="subject_ids[]" class="form-select select2" required>
+                                        <option value="">-- Pilih Mapel --</option>
+                                        @foreach($subjects as $subject)
+                                            <option value="{{ $subject->id }}" {{ (int) $sst->subject_id === (int) $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <select name="teacher_ids[]" class="form-select select2" required>
+                                        <option value="">-- Pilih Guru --</option>
+                                        @foreach($teachers as $teacher)
+                                            <option value="{{ $teacher->id }}" {{ (int) $sst->teacher_id === (int) $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-2 d-grid">
+                                    <button type="button" class="admin-btn admin-btn--outline remove-mapel-guru" {{ $i === 0 ? 'disabled' : '' }}>Hapus</button>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="row g-2 align-items-start mb-2 mapel-guru-row">
+                                <div class="col-md-5">
+                                    <select name="subject_ids[]" class="form-select select2" required>
+                                        <option value="">-- Pilih Mapel --</option>
+                                        @foreach($subjects as $subject)
+                                            <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <select name="teacher_ids[]" class="form-select select2" required>
+                                        <option value="">-- Pilih Guru --</option>
+                                        @foreach($teachers as $teacher)
+                                            <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-2 d-grid">
+                                    <button type="button" class="admin-btn admin-btn--outline remove-mapel-guru" disabled>Hapus</button>
+                                </div>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap">
+                    <button type="submit" class="admin-btn admin-btn--solid">Update</button>
+                    <a href="{{ route('admin.schedules.index') }}" class="admin-btn admin-btn--outline">Batal</a>
+                </div>
+            </form>
         </div>
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="{{ route('admin.schedules.index') }}" class="btn btn-secondary">Batal</a>
-    </form>
+    </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelector('.add-mapel-guru').onclick = function() {
-            let row = this.closest('.row').cloneNode(true);
-            row.querySelectorAll('select').forEach(sel => sel.value = '');
-            row.querySelector('.add-mapel-guru').outerHTML = '<button type="button" class="btn btn-danger remove-mapel-guru">-</button>';
-            document.getElementById('mapel-guru-list').appendChild(row);
-        };
-        document.getElementById('mapel-guru-list').addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-mapel-guru')) {
-                e.target.closest('.row').remove();
-            }
-        });
-    });
-</script>
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(function () {
+            function initSelect2($scope) {
+                $scope.find('select.select2').select2({ width: '100%' });
+            }
+
+            initSelect2($(document));
+
+            $('.add-mapel-guru').on('click', function () {
+                let $firstRow = $('#mapel-guru-list .mapel-guru-row').first();
+
+                $firstRow.find('select.select2').select2('destroy');
+                let $clone = $firstRow.clone();
+                initSelect2($firstRow);
+
+                $clone.find('select').val('');
+                $clone.find('button.remove-mapel-guru').prop('disabled', false);
+                $('#mapel-guru-list').append($clone);
+                initSelect2($clone);
+                $clone.find('select').val('').trigger('change');
+            });
+
+            $('#mapel-guru-list').on('click', '.remove-mapel-guru', function () {
+                if ($(this).is(':disabled')) return;
+                let $row = $(this).closest('.mapel-guru-row');
+                $row.find('select.select2').select2('destroy');
+                $row.remove();
+            });
+        });
+    </script>
+@endpush

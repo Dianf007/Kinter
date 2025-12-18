@@ -3,16 +3,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Schedule;
 use App\Models\Classroom;
-use App\Models\Room;
 use App\Models\School;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\ScheduleSubjectTeacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
 
 class AdminScheduleController extends Controller
 {
+    private function canonicalDateFromDayOfWeek(int $dayOfWeekIso): string
+    {
+        $dayOfWeekIso = max(1, min(7, $dayOfWeekIso));
+
+        // Store a canonical date per weekday to keep DB schema intact (weekly schedule).
+        // 2020-01-06 is a Monday.
+        $baseMonday = Carbon::create(2020, 1, 6)->startOfDay();
+        return $baseMonday->copy()->addDays($dayOfWeekIso - 1)->toDateString();
+    }
+
     private function currentRole(): string
     {
         return (string) Session::get('admin_role', 'admin');
@@ -43,7 +53,7 @@ class AdminScheduleController extends Controller
     {
         $schoolId = $request->input('school_id');
         $classroomId = $request->input('classroom_id');
-        $query = Schedule::with(['classroom', 'room', 'scheduleSubjectTeachers.subject', 'scheduleSubjectTeachers.teacher']);
+        $query = Schedule::with(['classroom', 'scheduleSubjectTeachers.subject', 'scheduleSubjectTeachers.teacher']);
 
         $query->whereIn('school_id', $this->allowedSchoolIds());
 
@@ -79,11 +89,6 @@ class AdminScheduleController extends Controller
             ->whereIn('school_id', $this->allowedSchoolIds())
             ->orderBy('name')
             ->get();
-        $rooms = Room::query()
-            ->when($schoolId, fn ($q) => $q->where('school_id', $schoolId))
-            ->whereIn('school_id', $this->allowedSchoolIds())
-            ->orderBy('name')
-            ->get();
         $subjects = Subject::query()
             ->when($schoolId, fn ($q) => $q->where('school_id', $schoolId))
             ->whereIn('school_id', $this->allowedSchoolIds())
@@ -94,7 +99,7 @@ class AdminScheduleController extends Controller
             ->whereIn('school_id', $this->allowedSchoolIds())
             ->orderBy('name')
             ->get();
-        return view('admin.schedules.create', compact('schools', 'classrooms', 'rooms', 'subjects', 'teachers'));
+        return view('admin.schedules.create', compact('schools', 'classrooms', 'subjects', 'teachers'));
     }
 
     public function store(Request $request)
@@ -102,8 +107,7 @@ class AdminScheduleController extends Controller
         $request->validate([
             'school_id' => 'required|exists:schools,id',
             'classroom_id' => 'required|exists:classrooms,id',
-            'room_id' => 'required|exists:rooms,id',
-            'date' => 'required|date',
+            'day_of_week' => 'required|integer|min:1|max:7',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
             'subject_ids' => 'required|array',
@@ -114,7 +118,6 @@ class AdminScheduleController extends Controller
 
         $schoolId = (int) $request->input('school_id');
         abort_if(!Classroom::query()->where('id', (int) $request->input('classroom_id'))->where('school_id', $schoolId)->exists(), 422, 'Kelas harus berasal dari sekolah yang dipilih.');
-        abort_if(!Room::query()->where('id', (int) $request->input('room_id'))->where('school_id', $schoolId)->exists(), 422, 'Ruang harus berasal dari sekolah yang dipilih.');
 
         $subjectIds = array_values(array_map('intval', (array) $request->input('subject_ids', [])));
         $teacherIds = array_values(array_map('intval', (array) $request->input('teacher_ids', [])));
@@ -128,7 +131,15 @@ class AdminScheduleController extends Controller
             abort_if($cnt !== count(array_unique($teacherIds)), 422, 'Semua guru harus berasal dari sekolah yang dipilih.');
         }
 
-        $schedule = Schedule::create($request->only(['school_id', 'classroom_id', 'room_id', 'date', 'start_time', 'end_time', 'note']));
+        $date = $this->canonicalDateFromDayOfWeek((int) $request->input('day_of_week'));
+        $schedule = Schedule::create([
+            'school_id' => $schoolId,
+            'classroom_id' => (int) $request->input('classroom_id'),
+            'date' => $date,
+            'start_time' => (string) $request->input('start_time'),
+            'end_time' => (string) $request->input('end_time'),
+            'note' => $request->input('note'),
+        ]);
         // Multi mapel-guru
         foreach ($request->subject_ids as $i => $subjectId) {
             $teacherId = $request->teacher_ids[$i] ?? null;
@@ -150,12 +161,11 @@ class AdminScheduleController extends Controller
         $schoolId = (int) $schedule->school_id;
         $schools = School::query()->whereIn('id', $this->allowedSchoolIds())->orderBy('name')->get();
         $classrooms = Classroom::query()->where('school_id', $schoolId)->orderBy('name')->get();
-        $rooms = Room::query()->where('school_id', $schoolId)->orderBy('name')->get();
         $subjects = Subject::query()->where('school_id', $schoolId)->orderBy('name')->get();
         $teachers = Teacher::query()->where('school_id', $schoolId)->orderBy('name')->get();
         $selectedSubjects = $schedule->scheduleSubjectTeachers->pluck('subject_id')->toArray();
         $selectedTeachers = $schedule->scheduleSubjectTeachers->pluck('teacher_id')->toArray();
-        return view('admin.schedules.edit', compact('schedule', 'schools', 'classrooms', 'rooms', 'subjects', 'teachers', 'selectedSubjects', 'selectedTeachers'));
+        return view('admin.schedules.edit', compact('schedule', 'schools', 'classrooms', 'subjects', 'teachers', 'selectedSubjects', 'selectedTeachers'));
     }
 
     public function update(Request $request, Schedule $schedule)
@@ -163,8 +173,7 @@ class AdminScheduleController extends Controller
         $request->validate([
             'school_id' => 'required|exists:schools,id',
             'classroom_id' => 'required|exists:classrooms,id',
-            'room_id' => 'required|exists:rooms,id',
-            'date' => 'required|date',
+            'day_of_week' => 'required|integer|min:1|max:7',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
             'subject_ids' => 'required|array',
@@ -176,7 +185,6 @@ class AdminScheduleController extends Controller
 
         $schoolId = (int) $request->input('school_id');
         abort_if(!Classroom::query()->where('id', (int) $request->input('classroom_id'))->where('school_id', $schoolId)->exists(), 422, 'Kelas harus berasal dari sekolah yang dipilih.');
-        abort_if(!Room::query()->where('id', (int) $request->input('room_id'))->where('school_id', $schoolId)->exists(), 422, 'Ruang harus berasal dari sekolah yang dipilih.');
 
         $subjectIds = array_values(array_map('intval', (array) $request->input('subject_ids', [])));
         $teacherIds = array_values(array_map('intval', (array) $request->input('teacher_ids', [])));
@@ -190,7 +198,15 @@ class AdminScheduleController extends Controller
             abort_if($cnt !== count(array_unique($teacherIds)), 422, 'Semua guru harus berasal dari sekolah yang dipilih.');
         }
 
-        $schedule->update($request->only(['school_id', 'classroom_id', 'room_id', 'date', 'start_time', 'end_time', 'note']));
+        $date = $this->canonicalDateFromDayOfWeek((int) $request->input('day_of_week'));
+        $schedule->update([
+            'school_id' => $schoolId,
+            'classroom_id' => (int) $request->input('classroom_id'),
+            'date' => $date,
+            'start_time' => (string) $request->input('start_time'),
+            'end_time' => (string) $request->input('end_time'),
+            'note' => $request->input('note'),
+        ]);
         // Sync mapel-guru
         $schedule->scheduleSubjectTeachers()->delete();
         foreach ($request->subject_ids as $i => $subjectId) {
