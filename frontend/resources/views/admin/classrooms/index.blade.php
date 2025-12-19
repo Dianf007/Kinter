@@ -71,6 +71,18 @@
         .text-muted {
             color: var(--admin-text-muted) !important;
         }
+        /* Table hover state yang support dark/light mode */
+        .table tbody tr:hover {
+            background: var(--admin-bg) !important;
+            color: var(--admin-text) !important;
+        }
+        .table tbody tr:hover td {
+            color: var(--admin-text) !important;
+        }
+        .table tbody tr:hover a,
+        .table tbody tr:hover button {
+            color: inherit;
+        }
     </style>
 @endpush
 @section('content')

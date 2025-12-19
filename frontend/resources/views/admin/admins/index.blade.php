@@ -53,6 +53,28 @@
             border: 1px solid rgba(28,31,46,0.12);
             padding: 8px 12px;
         }
+        .table {
+            color: var(--admin-text);
+        }
+        .table th {
+            color: var(--admin-text);
+            background: var(--admin-bg);
+        }
+        .text-muted {
+            color: var(--admin-text-muted) !important;
+        }
+        /* Table hover state yang support dark/light mode */
+        .table tbody tr:hover {
+            background: var(--admin-bg) !important;
+            color: var(--admin-text) !important;
+        }
+        .table tbody tr:hover td {
+            color: var(--admin-text) !important;
+        }
+        .table tbody tr:hover a,
+        .table tbody tr:hover button {
+            color: inherit;
+        }
     </style>
 @endpush
 

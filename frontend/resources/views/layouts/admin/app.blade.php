@@ -338,9 +338,12 @@
                                 <a href="{{ route('admin.classrooms.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.classrooms.*') ? 'active' : '' }}">
                                     <i class="fas fa-chalkboard"></i> <span>Kelas</span>
                                 </a>
-                                <a href="{{ route('admin.schedules.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.schedules.*') ? 'active' : '' }}">
-                                    <i class="fas fa-calendar-week"></i> <span>Jadwal</span>
-                                </a>
+                                    <a href="{{ route('admin.students.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
+                                        <i class="fas fa-user-graduate"></i> <span>Siswa</span>
+                                    </a>
+                                    <a href="{{ route('admin.schedules.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.schedules.*') ? 'active' : '' }}">
+                                        <i class="fas fa-calendar-week"></i> <span>Jadwal</span>
+                                    </a>
                             </div>
                         </div>
                     @endif

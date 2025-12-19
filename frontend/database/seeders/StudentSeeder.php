@@ -13,67 +13,20 @@ class StudentSeeder extends Seeder
      */
     public function run(): void
     {
-        $students = [
-            [
-                'student_id' => 'PK001',
-                'name' => 'Himawari no Youna',
-                'class' => '2',
-                'email' => 'himawari@student.id',
-                'teacher_id' => 1
-            ],
-            [
-                'student_id' => 'PK020',
-                'name' => 'Achmad Azzam Ramadhan',
-                'class' => '5', 
-                'email' => 'azzam@pondokkoding.com',
-                'teacher_id' => 1
-            ],
-            [
-                'student_id' => 'PK002',
-                'name' => 'Keanu Dian A.',
-                'class' => '2',
-                'email' => 'keanu@pondokkoding.com',
-                'teacher_id' => 1
-            ],
-            [
-                'student_id' => 'STU004',
-                'name' => 'Dewi Lestari',
-                'class' => '5B',
-                'email' => 'dewi.lestari@student.id',
-                'teacher_id' => 1
-            ],
-            [
-                'student_id' => 'STU005',
-                'name' => 'Andi Firmansyah',
-                'class' => '5C',
-                'email' => 'andi.firmansyah@student.id',
-                'teacher_id' => 1
-            ],
-            [
-                'student_id' => 'STU006',
-                'name' => 'Maya Kusuma',
-                'class' => '5C',
-                'email' => 'maya.kusuma@student.id',
-                'teacher_id' => 1
-            ],
-            [
-                'student_id' => 'STU007',
-                'name' => 'Rio Pratama',
-                'class' => '6A',
-                'email' => 'rio.pratama@student.id',
-                'teacher_id' => 1
-            ],
-            [
-                'student_id' => 'STU008',
-                'name' => 'Indira Sari',
-                'class' => '6A',
-                'email' => 'indira.sari@student.id',
-                'teacher_id' => 1
-            ]
-        ];
-
-        foreach ($students as $student) {
-            Student::create($student);
+        $faker = \Faker\Factory::create('id_ID');
+        $schools = \App\Models\School::all();
+        foreach ($schools as $school) {
+            for ($i = 1; $i <= 20; $i++) {
+                Student::create([
+                    'school_id' => $school->id,
+                    'name' => $faker->name,
+                    'email' => $faker->unique()->safeEmail,
+                    'student_id' => $school->id . str_pad($i, 4, '0', STR_PAD_LEFT),
+                    'class' => $faker->randomElement(['1A','1B','2A','2B','3A','3B','4A','4B','5A','5B','6A','6B']),
+                    'teacher_id' => 1, // atau random jika ada data guru
+                    'avatar' => null
+                ]);
+            }
         }
     }
 }

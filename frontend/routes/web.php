@@ -87,34 +87,38 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::post('/school/switch', [AdminSchoolController::class, 'switch'])->name('school.switch');
 
     Route::middleware('admin.school')->group(function () {
-    Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('dashboard');
+        Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('dashboard');
 
-    Route::resource('kid-projects', AdminKidProjectController::class)
-        ->except(['show'])
-        ->middleware('admin.role:admin,superadmin,ultraadmin');
+        Route::resource('kid-projects', AdminKidProjectController::class)
+            ->except(['show'])
+            ->middleware('admin.role:admin,superadmin,ultraadmin');
 
-    Route::resource('schedules', AdminScheduleController::class)
-        ->except(['show'])
-        ->middleware('admin.role:admin,superadmin,ultraadmin');
+        Route::resource('schedules', AdminScheduleController::class)
+            ->except(['show'])
+            ->middleware('admin.role:admin,superadmin,ultraadmin');
 
-    // DataTables server-side endpoint (must be before resource to avoid {classroom}=data)
-    Route::get('classrooms/data', [ClassroomController::class, 'data'])
-        ->name('classrooms.data')
-        ->middleware('admin.role:admin,superadmin');
+        // DataTables server-side endpoint (must be before resource to avoid {classroom}=data)
+        Route::get('classrooms/data', [ClassroomController::class, 'data'])
+            ->name('classrooms.data')
+            ->middleware('admin.role:admin,superadmin');
 
-    // Classroom CRUD
-    Route::resource('classrooms', ClassroomController::class)
-        ->except(['show'])
-        ->middleware('admin.role:admin,superadmin');
+        // Classroom CRUD
+        Route::resource('classrooms', ClassroomController::class)
+            ->except(['show'])
+            ->middleware('admin.role:admin,superadmin');
 
-    // DataTables server-side endpoint (must be before resource to avoid {admin}=data)
-    Route::get('admins/data', [AdminManagementController::class, 'data'])
-        ->name('admins.data')
-        ->middleware('admin.role:superadmin,ultraadmin');
+        // Student CRUD
+        Route::resource('students', App\Http\Controllers\AdminStudentController::class)
+            ->except(['show'])
+            ->middleware('admin.role:admin,superadmin');
 
-    Route::resource('admins', AdminManagementController::class)
-        ->except(['show'])
-        ->middleware('admin.role:superadmin,ultraadmin');
+        // DataTables server-side endpoint (must be before resource to avoid {admin}=data)
+        Route::get('admins/data', [AdminManagementController::class, 'data'])
+            ->name('admins.data')
+            ->middleware('admin.role:superadmin,ultraadmin');
 
+        Route::resource('admins', AdminManagementController::class)
+            ->except(['show'])
+            ->middleware('admin.role:superadmin,ultraadmin');
     });
 });
