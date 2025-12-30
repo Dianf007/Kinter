@@ -60,11 +60,46 @@
                 <table class="table table-bordered table-hover align-middle">
                     <thead>
                         <tr>
-                            <th>NIS</th>
-                            <th>Nama</th>
-                            <th>Email</th>
-                            <th>Kelas</th>
-                            <th>Sekolah</th>
+                            <th style="cursor: pointer;">
+                                <a href="{{ route('admin.students.index', array_merge(request()->query(), ['sort' => 'student_id', 'order' => request('order') === 'asc' && request('sort') === 'student_id' ? 'desc' : 'asc'])) }}" style="color: inherit; text-decoration: none;">
+                                    NIS
+                                    @if(request('sort') === 'student_id')
+                                        {{ request('order') === 'asc' ? '↑' : '↓' }}
+                                    @endif
+                                </a>
+                            </th>
+                            <th style="cursor: pointer;">
+                                <a href="{{ route('admin.students.index', array_merge(request()->query(), ['sort' => 'name', 'order' => request('order') === 'asc' && request('sort') === 'name' ? 'desc' : 'asc'])) }}" style="color: inherit; text-decoration: none;">
+                                    Nama
+                                    @if(request('sort') === 'name')
+                                        {{ request('order') === 'asc' ? '↑' : '↓' }}
+                                    @endif
+                                </a>
+                            </th>
+                            <th style="cursor: pointer;">
+                                <a href="{{ route('admin.students.index', array_merge(request()->query(), ['sort' => 'email', 'order' => request('order') === 'asc' && request('sort') === 'email' ? 'desc' : 'asc'])) }}" style="color: inherit; text-decoration: none;">
+                                    Email
+                                    @if(request('sort') === 'email')
+                                        {{ request('order') === 'asc' ? '↑' : '↓' }}
+                                    @endif
+                                </a>
+                            </th>
+                            <th style="cursor: pointer;">
+                                <a href="{{ route('admin.students.index', array_merge(request()->query(), ['sort' => 'class', 'order' => request('order') === 'asc' && request('sort') === 'class' ? 'desc' : 'asc'])) }}" style="color: inherit; text-decoration: none;">
+                                    Kelas
+                                    @if(request('sort') === 'class')
+                                        {{ request('order') === 'asc' ? '↑' : '↓' }}
+                                    @endif
+                                </a>
+                            </th>
+                            <th style="cursor: pointer;">
+                                <a href="{{ route('admin.students.index', array_merge(request()->query(), ['sort' => 'student_code', 'order' => request('order') === 'asc' && request('sort') === 'student_code' ? 'desc' : 'asc'])) }}" style="color: inherit; text-decoration: none;">
+                                    Student Code
+                                    @if(request('sort') === 'student_code')
+                                        {{ request('order') === 'asc' ? '↑' : '↓' }}
+                                    @endif
+                                </a>
+                            </th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -75,7 +110,7 @@
                             <td>{{ $student->name }}</td>
                             <td>{{ $student->email }}</td>
                             <td>{{ $student->class }}</td>
-                            <td>{{ $student->school->name ?? '-' }}</td>
+                            <td>{{ $student->student_code ?? '-' }}</td>
                             <td>
                                 <a href="{{ route('admin.students.edit', $student) }}" class="admin-btn admin-btn--solid btn-sm">Edit</a>
                                 <form action="{{ route('admin.students.destroy', $student) }}" method="POST" style="display:inline-block">

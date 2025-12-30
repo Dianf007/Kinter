@@ -26,7 +26,17 @@ class AdminStudentController extends Controller
                 ;
             });
         }
-        $students = $query->orderBy('name')->paginate(15)->withQueryString();
+        
+        // Sorting logic
+        $sort = $request->input('sort', 'name');
+        $order = $request->input('order', 'asc');
+        
+        // Validate sort and order to prevent SQL injection
+        $allowedSorts = ['student_id', 'name', 'email', 'class', 'student_code'];
+        $sort = in_array($sort, $allowedSorts) ? $sort : 'name';
+        $order = in_array($order, ['asc', 'desc']) ? $order : 'asc';
+        
+        $students = $query->orderBy($sort, $order)->paginate(15)->withQueryString();
         return view('admin.students.index', compact('students', 'schools', 'schoolId'));
     }
 
