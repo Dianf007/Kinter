@@ -18,8 +18,8 @@
         <input type="text" name="student_id" id="student_id" class="form-control" value="{{ old('student_id', $student->student_id ?? '') }}" required>
     </div>
     <div class="col-md-6">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $student->email ?? '') }}">
+        <label for="student_code" class="form-label">Kode Siswa</label>
+        <input type="text" name="student_code" id="student_code" class="form-control" value="{{ old('student_code', $student->student_code ?? '') }}">
     </div>
     <div class="col-md-4">
         <label for="class" class="form-label">Kelas</label>
@@ -44,5 +44,9 @@
     <div class="col-md-6">
         <label for="address" class="form-label">Alamat</label>
         <input type="text" name="address" id="address" class="form-control" value="{{ old('address', $student->address ?? '') }}">
+    </div>
+    <div class="col-12">
+        <label for="catatan" class="form-label">Catatan</label>
+        <textarea name="catatan" id="catatan" class="form-control" rows="3">{{ old('catatan', $student->catatan ?? '') }}</textarea>
     </div>
 </div>

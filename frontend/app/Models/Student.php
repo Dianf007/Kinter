@@ -13,9 +13,11 @@ class Student extends Model
         'name',
         'email',
         'student_id',
+        'student_code',
         'class',
         'teacher_id',
-        'avatar'
+        'avatar',
+        'catatan'
     ];
     
     public function teacher()
