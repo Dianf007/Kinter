@@ -11,12 +11,13 @@ class AdminSchoolController extends Controller
     public function select()
     {
         $role = (string) Session::get('admin_role', 'admin');
-        abort_if($role === 'admin', 403);
 
         $allowedSchoolIds = $this->allowedSchoolIds($role);
 
         $availableSchoolsQuery = School::query()->orderBy('name');
-        if ($role === 'superadmin') {
+        if ($role === 'admin') {
+            $availableSchoolsQuery->whereIn('id', $allowedSchoolIds);
+        } elseif ($role === 'superadmin') {
             $availableSchoolsQuery->whereIn('id', $allowedSchoolIds);
         }
 
@@ -35,10 +36,6 @@ class AdminSchoolController extends Controller
         $role = (string) Session::get('admin_role', 'admin');
         $schoolId = (int) $request->input('school_id');
 
-        if ($role === 'admin') {
-            abort(403);
-        }
-
         $allowedSchoolIds = $this->allowedSchoolIds($role);
         abort_if(!in_array($schoolId, $allowedSchoolIds, true), 403);
 
@@ -54,6 +51,10 @@ class AdminSchoolController extends Controller
         }
 
         if ($role === 'superadmin') {
+            return array_values(array_map('intval', array_filter((array) Session::get('admin_school_ids', []))));
+        }
+
+        if ($role === 'admin') {
             return array_values(array_map('intval', array_filter((array) Session::get('admin_school_ids', []))));
         }
 

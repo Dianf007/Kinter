@@ -112,6 +112,16 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
             ->except(['show'])
             ->middleware('admin.role:admin,superadmin');
 
+        // Teacher CRUD
+        Route::resource('teachers', App\Http\Controllers\AdminTeacherController::class)
+            ->except(['show'])
+            ->middleware('admin.role:admin,superadmin,ultraadmin');
+        
+        // Teacher API endpoint for dynamic subjects loading
+        Route::get('teachers/api/school-subjects/{schoolId}', [App\Http\Controllers\AdminTeacherController::class, 'getSchoolSubjects'])
+            ->name('teachers.school-subjects')
+            ->middleware('admin.role:admin,superadmin,ultraadmin');
+
         // DataTables server-side endpoint (must be before resource to avoid {admin}=data)
         Route::get('admins/data', [AdminManagementController::class, 'data'])
             ->name('admins.data')

@@ -12,15 +12,11 @@ class AdminRoleSeeder extends Seeder
     public function run(): void
     {
         $schools = School::query()->orderBy('id')->get();
-        if ($schools->count() < 2) {
-            // Pastikan minimal ada 2 sekolah
-            $defaults = [
-                ['name' => 'Pondok Koding Mojokerto', 'address' => null, 'phone' => null],
-                ['name' => 'Pondok Koding Surabaya', 'address' => null, 'phone' => null],
-            ];
-            foreach ($defaults as $data) {
-                School::firstOrCreate(['name' => $data['name']], $data);
-            }
+        // Sekolah sudah dibuat oleh SchoolSeeder, jangan duplikat lagi
+        if ($schools->isEmpty()) {
+            // Jika belum ada sekolah sama sekali, maka sesuatu error
+            $this->command->info('Schools not found! Running SchoolSeeder first...');
+            $this->call(SchoolSeeder::class);
             $schools = School::query()->orderBy('id')->get();
         }
 

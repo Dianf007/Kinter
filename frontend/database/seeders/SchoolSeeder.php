@@ -6,6 +6,11 @@ class SchoolSeeder extends Seeder
 {
     public function run()
     {
+        // Cek apakah sekolah sudah ada
+        if (School::count() > 0) {
+            return;
+        }
+        
         School::create([
             'name' => 'Pondok Koding Mojokerto',
             'address' => "Perumahan D'Garden City Blok N.05, Sidonganti, Ngingasrembyong, Kec. Sooko, Kabupaten Mojokerto, Jawa Timur",

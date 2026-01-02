@@ -168,7 +168,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding: 32px 32px 32px 0;
+            padding: 32px 32px 32px 32px;
             min-width: 0;
         }
         .admin-topbar {
@@ -257,6 +257,38 @@
             color: white;
             border-color: var(--admin-primary);
         }
+        .admin-sidebar__school-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--admin-text-light);
+            margin-bottom: 4px;
+        }
+        .admin-sidebar__school-select {
+            width: 100%;
+            padding: 6px 8px;
+            font-size: 0.85rem;
+            border: 1px solid var(--admin-border);
+            border-radius: 6px;
+            background: var(--admin-bg);
+            color: var(--admin-text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .admin-sidebar__school-select:hover {
+            border-color: var(--admin-primary);
+            background: var(--admin-card-bg);
+        }
+        .admin-sidebar__school-select:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .admin-sidebar__school-text {
+            padding: 4px 0;
+            color: var(--admin-text);
+            font-weight: 500;
+        }
         @media (max-width: 1024px) {
             .admin-shell {
                 flex-direction: column;
@@ -308,11 +340,32 @@
                         default => 'Admin',
                     };
                 @endphp
-                <div class="admin-sidebar__brand">
-                    <i class="fas fa-graduation-cap" style="color: var(--admin-primary); font-size: 1.5rem;"></i>
-                    <div style="flex: 1;">
-                        <div>{{ config('app.name', 'EduAdmin') }}</div>
-                        <span>{{ $roleLabel }}</span>
+                <div class="admin-sidebar__brand" style="flex-direction: column; align-items: flex-start; gap: 0;">
+                    <div style="display: flex; align-items: center; gap: 10px; width: 100%; margin-bottom: 12px;">
+                        <i class="fas fa-graduation-cap" style="color: var(--admin-primary); font-size: 1.5rem;"></i>
+                        <span style="font-size: 0.75rem; font-weight: 500; padding: 4px 10px; background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary)); color: white; border-radius: 6px; opacity: 0.9;">{{ $roleLabel }}</span>
+                    </div>
+                    @php
+                        $canSwitchSchool = in_array($adminRole, ['superadmin', 'ultraadmin'], true);
+                        $schoolCount = count($availableSchools ?? []);
+                        $currentSchoolName = $currentSchoolName ?? ($currentSchool->name ?? '-');
+                    @endphp
+                    <div class="admin-sidebar__school-selector" style="width: 100%;">
+                        <span>Sekolah</span>
+                        @if($schoolCount > 1 && $canSwitchSchool)
+                            <form method="POST" action="{{ route('admin.school.switch') }}" style="width: 100%;">
+                                @csrf
+                                <select name="school_id" class="admin-sidebar__school-select" onchange="this.form.submit()" aria-label="Switch school">
+                                    @foreach($availableSchools as $school)
+                                        <option value="{{ $school->id }}" {{ (int) session('admin_school_id') === (int) $school->id ? 'selected' : '' }}>
+                                            {{ $school->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </form>
+                        @else
+                            <div class="admin-sidebar__school-text">{{ $currentSchoolName }}</div>
+                        @endif
                     </div>
                 </div>
                 <div class="admin-sidebar__menu">
@@ -341,6 +394,9 @@
                                     <a href="{{ route('admin.students.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.students.*') ? 'active' : '' }}">
                                         <i class="fas fa-user-graduate"></i> <span>Siswa</span>
                                     </a>
+                                    <a href="{{ route('admin.teachers.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.teachers.*') ? 'active' : '' }}">
+                                        <i class="fas fa-user-tie"></i> <span>Guru</span>
+                                    </a>
                                     <a href="{{ route('admin.schedules.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.schedules.*') ? 'active' : '' }}">
                                         <i class="fas fa-calendar-week"></i> <span>Jadwal</span>
                                     </a>
@@ -360,12 +416,9 @@
                     @endif
                 </div>
                 <div class="admin-sidebar__bottom">
-                    <form method="POST" action="{{ route('admin.logout') }}" style="width: 100%;">
-                        @csrf
-                        <button type="submit" class="admin-sidebar__link" style="width: 100%; border: none; background: none; cursor: pointer; text-align: left;">
-                            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
-                        </button>
-                    </form>
+                    <a href="{{ route('admin.logout') }}" class="admin-sidebar__link" style="width: 100%;">
+                        <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                    </a>
                 </div>
                 <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button>
             </nav>
@@ -390,18 +443,6 @@
                             </div>
                         </div>
 
-                        @if($canSwitchSchool)
-                            <form method="POST" action="{{ route('admin.school.switch') }}" class="d-flex align-items-center gap-2 mb-0">
-                                @csrf
-                                <select name="school_id" class="form-select form-select-sm" onchange="this.form.submit()" aria-label="Switch school" style="min-width: 200px;">
-                                    @foreach($availableSchools as $school)
-                                        <option value="{{ $school->id }}" {{ (int) session('admin_school_id') === (int) $school->id ? 'selected' : '' }}>
-                                            {{ $school->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </form>
-                        @endif
                     </div>
 
                     <div class="d-flex align-items-center gap-2">

@@ -17,8 +17,8 @@ class DemoAcademySeeder extends Seeder
     {
         $schools = School::query()->orderBy('id')->get();
         if ($schools->isEmpty()) {
-            $this->call(SchoolSeeder::class);
-            $schools = School::query()->orderBy('id')->get();
+            // This should not happen as SchoolSeeder runs first
+            return;
         }
 
         // Kelas
