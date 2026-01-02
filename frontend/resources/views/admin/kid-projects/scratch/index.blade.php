@@ -91,7 +91,7 @@
                 <h4 class="mb-1">Kid Project Scratch</h4>
                 <p class="mb-0">Pantau dan kelola project Scratch murid secara real-time.</p>
             </div>
-            <a href="{{ route('admin.kid-projects.create') }}" class="admin-btn admin-btn--solid">+ Project Baru</a>
+            <a href="{{ route('admin.kid-projects.scratch.create') }}" class="admin-btn admin-btn--solid">+ Project Baru</a>
         </div>
         <div class="admin-card__body">
             @if(session('success'))
@@ -129,8 +129,8 @@
                             </div>
                             <div class="project-card__actions">
                                 <a href="https://scratch.mit.edu/projects/{{ $project->scratch_id }}" target="_blank" rel="noopener noreferrer" class="admin-btn admin-btn--outline">Preview</a>
-                                <a href="{{ route('admin.kid-projects.edit', $project) }}" class="admin-btn admin-btn--solid">Edit</a>
-                                <form action="{{ route('admin.kid-projects.destroy', $project) }}" method="POST" onsubmit="return confirm('Hapus project ini?');">
+                                <a href="{{ route('admin.kid-projects.scratch.edit', $project) }}" class="admin-btn admin-btn--solid">Edit</a>
+                                <form action="{{ route('admin.kid-projects.scratch.destroy', $project) }}" method="POST" onsubmit="return confirm('Hapus project ini?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="admin-btn admin-btn--outline" style="color:#b83d3d;border-color:rgba(184,61,61,0.4);">Delete</button>

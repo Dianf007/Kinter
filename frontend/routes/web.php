@@ -12,7 +12,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\TeacherReportController;
 use App\Http\Controllers\AdminAuthController;
-use App\Http\Controllers\AdminKidProjectController;
+use App\Http\Controllers\AdminKidProjectScratchController;
 use App\Http\Controllers\AdminSchoolController;
 use App\Http\Controllers\AdminScheduleController;
 use App\Http\Controllers\AdminManagementController;
@@ -89,9 +89,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::middleware('admin.school')->group(function () {
         Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('dashboard');
 
-        Route::resource('kid-projects', AdminKidProjectController::class)
-            ->except(['show'])
-            ->middleware('admin.role:admin,superadmin,ultraadmin');
+        Route::prefix('kid-projects')->name('kid-projects.')->group(function () {
+            Route::resource('scratch', AdminKidProjectScratchController::class)
+                ->except(['show'])
+                ->middleware('admin.role:admin,superadmin,ultraadmin');
+        });
 
         Route::resource('schedules', AdminScheduleController::class)
             ->except(['show'])

@@ -378,7 +378,7 @@
                         <div class="admin-sidebar__section">
                             <div class="admin-sidebar__section-title">Project</div>
                             <div class="admin-sidebar__submenu">
-                                <a href="{{ route('admin.kid-projects.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.kid-projects.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.kid-projects.scratch.index') }}" class="admin-sidebar__link {{ request()->routeIs('admin.kid-projects.scratch.*') ? 'active' : '' }}">
                                     <i class="fas fa-cube"></i> <span>Scratch</span>
                                 </a>
                             </div>

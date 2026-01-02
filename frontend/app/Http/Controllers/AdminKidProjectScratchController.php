@@ -6,7 +6,7 @@ use App\Models\KidProjectScratch;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-class AdminKidProjectController extends Controller
+class AdminKidProjectScratchController extends Controller
 {
     protected function ensureAdmin()
     {
@@ -37,7 +37,7 @@ class AdminKidProjectController extends Controller
         $projects = $query->orderByRaw('COALESCE(expired_dt, "2099-12-31") asc')
             ->paginate(12)
             ->withQueryString();
-        return view('admin.kid-projects.index', [
+        return view('admin.kid-projects.scratch.index', [
             'projects' => $projects,
             'search' => $search,
             'status' => $status,
@@ -46,32 +46,32 @@ class AdminKidProjectController extends Controller
     public function create()
     {
         $this->ensureAdmin();
-        return view('admin.kid-projects.create');
+        return view('admin.kid-projects.scratch.create');
     }
     public function store(Request $request)
     {
         $this->ensureAdmin();
         $data = $this->validatedData($request);
         KidProjectScratch::create($data);
-        return redirect()->route('admin.kid-projects.index')->with('success', 'Project created successfully.');
+        return redirect()->route('admin.kid-projects.scratch.index')->with('success', 'Project created successfully.');
     }
-    public function edit(KidProjectScratch $kid_project)
+    public function edit(KidProjectScratch $scratch)
     {
         $this->ensureAdmin();
-        return view('admin.kid-projects.edit', ['project' => $kid_project]);
+        return view('admin.kid-projects.scratch.edit', ['project' => $scratch]);
     }
-    public function update(Request $request, KidProjectScratch $kid_project)
+    public function update(Request $request, KidProjectScratch $scratch)
     {
         $this->ensureAdmin();
         $data = $this->validatedData($request);
-        $kid_project->update($data);
-        return redirect()->route('admin.kid-projects.index')->with('success', 'Project updated successfully.');
+        $scratch->update($data);
+        return redirect()->route('admin.kid-projects.scratch.index')->with('success', 'Project updated successfully');
     }
-    public function destroy(KidProjectScratch $kid_project)
+    public function destroy(KidProjectScratch $scratch)
     {
         $this->ensureAdmin();
-        $kid_project->delete();
-        return redirect()->route('admin.kid-projects.index')->with('success', 'Project deleted.');
+        $scratch->delete();
+        return redirect()->route('admin.kid-projects.scratch.index')->with('success', 'Project deleted.');
     }
     protected function validatedData(Request $request): array
     {
