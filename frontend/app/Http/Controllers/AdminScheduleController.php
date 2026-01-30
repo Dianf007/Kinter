@@ -146,7 +146,7 @@ class AdminScheduleController extends Controller
             if ($teacherId) {
                 ScheduleSubjectTeacher::create([
                     'schedule_id' => $schedule->id,
-                    'subject_id' => $subjectId,
+                    'mapel_id' => $subjectId,
                     'teacher_id' => $teacherId,
                 ]);
             }
@@ -163,7 +163,7 @@ class AdminScheduleController extends Controller
         $classrooms = Classroom::query()->where('school_id', $schoolId)->orderBy('name')->get();
         $subjects = Subject::query()->where('school_id', $schoolId)->orderBy('name')->get();
         $teachers = Teacher::query()->where('school_id', $schoolId)->orderBy('name')->get();
-        $selectedSubjects = $schedule->scheduleSubjectTeachers->pluck('subject_id')->toArray();
+        $selectedSubjects = $schedule->scheduleSubjectTeachers->pluck('mapel_id')->toArray();
         $selectedTeachers = $schedule->scheduleSubjectTeachers->pluck('teacher_id')->toArray();
         return view('admin.schedules.edit', compact('schedule', 'schools', 'classrooms', 'subjects', 'teachers', 'selectedSubjects', 'selectedTeachers'));
     }
@@ -214,7 +214,7 @@ class AdminScheduleController extends Controller
             if ($teacherId) {
                 ScheduleSubjectTeacher::create([
                     'schedule_id' => $schedule->id,
-                    'subject_id' => $subjectId,
+                    'mapel_id' => $subjectId,
                     'teacher_id' => $teacherId,
                 ]);
             }
