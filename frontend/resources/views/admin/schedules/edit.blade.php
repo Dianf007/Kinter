@@ -140,7 +140,7 @@
                                     <select name="subject_ids[]" class="form-select select2" required>
                                         <option value="">-- Pilih Mapel --</option>
                                         @foreach($subjects as $subject)
-                                            <option value="{{ $subject->id }}" {{ (int) $sst->subject_id === (int) $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                                            <option value="{{ $subject->id }}" {{ (int) $sst->mapel_id === (int) $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
