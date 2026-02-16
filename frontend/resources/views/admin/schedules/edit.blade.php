@@ -131,7 +131,10 @@
                 <div class="mb-3">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
                         <label class="form-label mb-0">Mapel & Guru (multi)</label>
-                        <button type="button" class="admin-btn admin-btn--solid add-mapel-guru">+ Tambah Baris</button>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="admin-btn admin-btn--solid add-mapel-guru">+ Tambah Baris</button>
+                            <button type="button" class="admin-btn admin-btn--outline" data-bs-toggle="modal" data-bs-target="#createMapelModal">+ Tambah Mapel</button>
+                        </div>
                     </div>
                     <div id="mapel-guru-list">
                         @forelse($schedule->scheduleSubjectTeachers as $i => $sst)
@@ -195,7 +198,17 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        $(function () {
+        // Tunggu sampai jQuery sudah ready
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof jQuery === 'undefined') {
+                console.error('jQuery is not loaded yet, retrying...');
+                setTimeout(arguments.callee, 100);
+                return;
+            }
+
+            const $ = jQuery;
+            
+            $(function () {
             function initSelect2($scope) {
                 $scope.find('select.select2').select2({ width: '100%' });
             }
@@ -222,6 +235,112 @@
                 $row.find('select.select2').select2('destroy');
                 $row.remove();
             });
+
+            // Handle create mapel modal
+            $('#createMapelForm').on('submit', function (e) {
+                e.preventDefault();
+                let $btn = $(this).find('button[type="submit"]');
+                let $spinner = $btn.find('.spinner-border');
+                let $text = $btn.find('.btn-text');
+                let mapelName = $('#mapelName').val().trim();
+                let schoolId = $('select[name="school_id"]').val();
+
+                console.log('Form submitted:', { mapelName, schoolId });
+
+                if (!mapelName) {
+                    alert('Nama mapel tidak boleh kosong');
+                    return;
+                }
+
+                if (!schoolId) {
+                    alert('Pilih sekolah terlebih dahulu');
+                    return;
+                }
+
+                $spinner.removeClass('d-none');
+                $text.text('Menyimpan...');
+                $btn.prop('disabled', true);
+
+                console.log('Sending AJAX to:', '{{ route("admin.schedules.store-mapel") }}');
+
+                $.ajax({
+                    url: '{{ route("admin.schedules.store-mapel") }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        school_id: schoolId,
+                        name: mapelName,
+                    },
+                    success: function (response) {
+                        console.log('AJAX success response:', response);
+                        if (response.success) {
+                            // Add new option to all subject selects
+                            $('select[name="subject_ids[]"]').each(function () {
+                                let $select = $(this);
+                                let $newOption = $('<option></option>')
+                                    .attr('value', response.mapel.id)
+                                    .text(response.mapel.name);
+                                $select.append($newOption);
+
+                                // Reinitialize select2
+                                if ($select.data('select2')) {
+                                    $select.select2('destroy');
+                                }
+                                $select.select2({
+                                    placeholder: '-- Pilih Mapel --',
+                                    allowClear: true,
+                                    width: '100%',
+                                    minimumInputLength: 0
+                                });
+                            });
+
+                            // Clear form and close modal
+                            $('#createMapelForm')[0].reset();
+                            let modal = bootstrap.Modal.getInstance(document.getElementById('createMapelModal'));
+                            if (modal) modal.hide();
+
+                            alert('Mapel berhasil ditambahkan!');
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('AJAX error:', xhr.status, xhr.responseJSON || xhr.responseText);
+                        let message = 'Error: ' + (xhr.responseJSON?.message || xhr.responseText || 'Gagal menambahkan mapel');
+                        alert(message);
+                    },
+                    complete: function () {
+                        console.log('AJAX complete');
+                        $spinner.addClass('d-none');
+                        $text.text('Tambah Mapel');
+                        $btn.prop('disabled', false);
+                    }
+                });
+            });
         });
     </script>
-@endpush
+
+    <!-- Modal Create Mapel -->
+    <div class="modal fade" id="createMapelModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background: var(--admin-card-bg); border: 1px solid var(--admin-border); color: var(--admin-text);">
+                <div class="modal-header" style="border-bottom: 1px solid var(--admin-border);">
+                    <h5 class="modal-title">Tambah Mapel Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="createMapelForm">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Nama Mapel</label>
+                            <input type="text" id="mapelName" name="name" class="form-control" placeholder="Contoh: Matematika, Bahasa Indonesia" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 1px solid var(--admin-border);">
+                        <button type="button" class="admin-btn admin-btn--outline" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="admin-btn admin-btn--solid">
+                            <span class="spinner-border spinner-border-sm d-none me-2" role="status" aria-hidden="true"></span>
+                            <span class="btn-text">Tambah Mapel</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

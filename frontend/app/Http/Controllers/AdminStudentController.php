@@ -53,13 +53,27 @@ class AdminStudentController extends Controller
             'school_id' => 'required|exists:schools,id',
             'name' => 'required|string|max:100',
             'student_id' => 'required|string|max:30|unique:students,student_id',
-            'email' => 'nullable|email|max:100',
-            'class' => 'nullable|string|max:30',
+            'email' => 'required|email|unique:students,email',
+            'password' => 'required|string|min:6',
+            'class' => 'required|string|max:30',
             'gender' => 'nullable|in:L,P',
             'birth_date' => 'nullable|date',
             'phone' => 'nullable|string|max:30',
             'address' => 'nullable|string|max:255',
+            'student_code' => 'nullable|string|max:30|unique:students,student_code',
         ]);
+
+        // Auto-generate student_code if not provided
+        if (empty($data['student_code'])) {
+            $data['student_code'] = strtoupper(substr($data['name'], 0, 2)) . $data['student_id'];
+        }
+
+        // Hash password
+        $data['password'] = \Illuminate\Support\Facades\Hash::make($data['password']);
+
+        // Auto-assign to current authenticated admin
+        $data['teacher_id'] = auth()->id() ?: 1;
+
         Student::create($data);
         return redirect()->route('admin.students.index')->with('success', 'Siswa berhasil ditambahkan.');
     }
@@ -77,8 +91,9 @@ class AdminStudentController extends Controller
             'school_id' => 'required|exists:schools,id',
             'name' => 'required|string|max:100',
             'student_id' => 'required|string|max:30|unique:students,student_id,' . $student->id,
-            'email' => 'nullable|email|max:100',
-            'class' => 'nullable|string|max:30',
+            'email' => 'required|email|unique:students,email,' . $student->id,
+            'password' => 'nullable|string|min:6',
+            'class' => 'required|string|max:30',
             'gender' => 'nullable|in:L,P',
             'birth_date' => 'nullable|date',
             'phone' => 'nullable|string|max:30',

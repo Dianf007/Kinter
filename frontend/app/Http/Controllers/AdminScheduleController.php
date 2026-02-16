@@ -229,4 +229,26 @@ class AdminScheduleController extends Controller
         $schedule->delete();
         return redirect()->route('admin.schedules.index')->with('success', 'Jadwal berhasil dihapus');
     }
+
+    public function storeMapel(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required|integer|exists:schools,id',
+            'name' => 'required|string|max:255',
+        ]);
+
+        $schoolId = (int) $request->input('school_id');
+        $this->ensureSchoolAllowed($schoolId);
+
+        $mapel = Subject::create([
+            'school_id' => $schoolId,
+            'name' => (string) $request->input('name'),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'mapel' => $mapel,
+            'message' => 'Mapel berhasil ditambahkan',
+        ]);
+    }
 }

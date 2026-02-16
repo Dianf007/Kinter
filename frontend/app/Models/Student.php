@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
+use Laravel\Passport\HasApiTokens;
 
-class Student extends Model
+class Student extends Model implements Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens, AuthenticatableTrait;
     
     protected $fillable = [
         'name',
@@ -17,7 +20,17 @@ class Student extends Model
         'class',
         'teacher_id',
         'avatar',
-        'catatan'
+        'catatan',
+        'password',
+        'birth_date',
+        'gender',
+        'phone',
+        'address'
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
     
     public function teacher()
@@ -28,6 +41,11 @@ class Student extends Model
     public function dailyReports()
     {
         return $this->hasMany(DailyReport::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(KidProjectScratch::class, 'user_id');
     }
     
     public function getAvatarUrlAttribute()

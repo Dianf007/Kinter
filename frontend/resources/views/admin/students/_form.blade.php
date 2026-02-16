@@ -14,16 +14,27 @@
         <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $student->name ?? '') }}" required>
     </div>
     <div class="col-md-6">
+        <label for="email" class="form-label">Email <span style="color: var(--admin-danger);">*</span></label>
+        <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $student->email ?? '') }}" required>
+    </div>
+    <div class="col-md-6">
         <label for="student_id" class="form-label">NIS</label>
         <input type="text" name="student_id" id="student_id" class="form-control" value="{{ old('student_id', $student->student_id ?? '') }}" required>
+    </div>
+    <div class="col-md-6">
+        <label for="password" class="form-label">Password @if(isset($student)) (biarkan kosong jika tidak ingin ubah) @endif <span style="color: var(--admin-danger);">*</span></label>
+        <input type="password" name="password" id="password" class="form-control" {{ isset($student) ? '' : 'required' }}>
+        @if(!isset($student))
+            <small style="color: var(--admin-text-muted);">Minimal 6 karakter</small>
+        @endif
     </div>
     <div class="col-md-6">
         <label for="student_code" class="form-label">Kode Siswa</label>
         <input type="text" name="student_code" id="student_code" class="form-control" value="{{ old('student_code', $student->student_code ?? '') }}">
     </div>
     <div class="col-md-4">
-        <label for="class" class="form-label">Kelas</label>
-        <input type="text" name="class" id="class" class="form-control" value="{{ old('class', $student->class ?? '') }}">
+        <label for="class" class="form-label">Kelas <span style="color: var(--admin-danger);">*</span></label>
+        <input type="text" name="class" id="class" class="form-control" value="{{ old('class', $student->class ?? '') }}" placeholder="Contoh: Grade 5A" required>
     </div>
     <div class="col-md-4">
         <label for="gender" class="form-label">Jenis Kelamin</label>

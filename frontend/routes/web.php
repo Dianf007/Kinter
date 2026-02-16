@@ -17,6 +17,9 @@ use App\Http\Controllers\AdminSchoolController;
 use App\Http\Controllers\AdminScheduleController;
 use App\Http\Controllers\AdminManagementController;
 use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\StudentAuthController;
+use App\Http\Controllers\StudentProfileController;
+use App\Http\Controllers\StudentProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,6 +102,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
             ->except(['show'])
             ->middleware('admin.role:admin,superadmin,ultraadmin');
 
+        Route::post('schedules/create-mapel', [AdminScheduleController::class, 'storeMapel'])
+            ->name('schedules.store-mapel')
+            ->middleware('admin.role:admin,superadmin,ultraadmin');
+
         // DataTables server-side endpoint (must be before resource to avoid {classroom}=data)
         Route::get('classrooms/data', [ClassroomController::class, 'data'])
             ->name('classrooms.data')
@@ -133,4 +140,31 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
             ->except(['show'])
             ->middleware('admin.role:superadmin,ultraadmin');
     });
+});
+
+// Student Routes (Passport Token Auth)
+Route::prefix('api/student')->group(function () {
+    // Public routes (no auth required)
+    Route::post('/auth/login', [StudentAuthController::class, 'login'])->name('student.login');
+
+    // Protected routes (auth required)
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/auth/logout', [StudentAuthController::class, 'logout'])->name('student.logout');
+        Route::get('/auth/me', [StudentAuthController::class, 'me'])->name('student.me');
+
+        // Profile
+        Route::put('/profile', [StudentProfileController::class, 'update'])->name('student.profile.update');
+
+        // Projects
+        Route::get('/projects', [StudentProjectController::class, 'index'])->name('student.projects.index');
+        Route::get('/projects/my', [StudentProjectController::class, 'myProjects'])->name('student.projects.my');
+        Route::get('/projects/{id}', [StudentProjectController::class, 'show'])->name('student.projects.show');
+        Route::put('/projects/{id}/publish', [StudentProjectController::class, 'updatePublishStatus'])->name('student.projects.publish');
+    });
+});
+
+// Student Pages (SPA Routes)
+Route::prefix('student')->group(function () {
+    Route::view('/login', 'student-app')->name('student.login.page');
+    Route::view('/{path?}', 'student-app')->where('path', '.*')->middleware('auth:api')->name('student.app');
 });
